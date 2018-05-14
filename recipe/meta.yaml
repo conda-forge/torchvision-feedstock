@@ -7,7 +7,7 @@ package:
 source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 3cf77c72a91cdbce77260546b8d83a7a5598bbf0b302ac0ef8ffcae3609aa455
+  sha256: 91f1e21121dca7e14ec35b5f2127da77c8c52e61d39957ab5dd4a719a837a04c
 
 build:
   number: 0
