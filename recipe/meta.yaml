@@ -1,4 +1,4 @@
-{% set version = "0.2.1" %}
+{% set version = "0.4.0" %}
 
 package:
   name: torchvision
@@ -7,10 +7,10 @@ package:
 source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 91f1e21121dca7e14ec35b5f2127da77c8c52e61d39957ab5dd4a719a837a04c
+  sha256: ac93fa030b6aa4c243d7cf181b72624c86d5aa7af9bafb2c09b4c3027172613f
 
 build:
-  number: 1000
+  number: 0
   skip: True  # [not linux64]
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
