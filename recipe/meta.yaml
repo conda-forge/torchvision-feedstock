@@ -10,8 +10,8 @@ source:
   sha256: 91f1e21121dca7e14ec35b5f2127da77c8c52e61d39957ab5dd4a719a837a04c
 
 build:
-  number: 1000
-  skip: True  # [not linux64]
+  number: 1001
+  skip: True
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
@@ -36,7 +36,7 @@ test:
 
 about:
   home: http://pytorch.org/
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
   summary: Image and video datasets and models for torch deep learning
