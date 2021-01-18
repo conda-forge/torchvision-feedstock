@@ -1,4 +1,4 @@
-{% set version = "0.2.1" %}
+{% set version = "1.7.1 " %}
 
 package:
   name: torchvision
@@ -11,20 +11,26 @@ source:
 
 build:
   number: 1001
-  skip: True
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: pip install . -vv
 
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cuda') }}    # [cuda_compiler_version != "None"]
+  host:
     - python
     - setuptools
-
+    - numpy
+    - cudnn                           # [cuda_compiler_version != "None"]
+    - libpng
+    - jpeg
+    - ffmpeg =4.2  # [not win]
   run:
     - python
+    - {{ pin_compatible('cudnn') }}                       # [cuda_compiler_version != "None"]
+    - {{ pin_compatible('numpy') }}
     - pillow >=4.1.1
-    - numpy >=1.11
     - pytorch >=0.3
-    - six
 
 test:
   imports:
