@@ -37,6 +37,7 @@ requirements:
 test:
   requires:
     - pytest
+    - scipy
   source_files:
     - test
   imports:
