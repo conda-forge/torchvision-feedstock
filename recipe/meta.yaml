@@ -22,8 +22,8 @@ requirements:
     - pip
     - setuptools
     # split off image/video into separate outputs?
-    - libjpeg-turbo
-    - libpng
+    # - libjpeg-turbo
+    # - libpng
     # ffmpeg
     - numpy
     - pillow >=4.1.1
