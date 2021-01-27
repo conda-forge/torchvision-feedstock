@@ -18,13 +18,15 @@ requirements:
   host:
     - python
     - setuptools
-
   run:
     - python
+    # split off image/video into separate outputs?
+    - libjpeg-turbo
+    - libpng
+    # ffmpeg
+    - numpy
     - pillow >=4.1.1
-    - numpy >=1.11
     - pytorch >=0.3
-    - six
 
 test:
   imports:
