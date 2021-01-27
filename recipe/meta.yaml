@@ -29,12 +29,18 @@ requirements:
     - pytorch >=0.3
 
 test:
+  requires:
+    - pytest
+  source_files:
+    - test
   imports:
     - torchvision
     - torchvision.datasets
     - torchvision.models
     - torchvision.transforms
     - torchvision.utils
+  commands:
+    - pytest test/
 
 about:
   home: http://pytorch.org/
