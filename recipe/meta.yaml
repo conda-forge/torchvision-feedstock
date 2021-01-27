@@ -19,15 +19,17 @@ requirements:
     - python
     - pip
     - setuptools
-  run:
-    - python
     # split off image/video into separate outputs?
     - libjpeg-turbo
     - libpng
     # ffmpeg
     - numpy
     - pillow >=4.1.1
-    - pytorch >=0.3
+    - pytorch
+  run:
+    - python
+    - pytorch
+    - {{ pin_compatible('numpy') }}
 
 test:
   requires:
