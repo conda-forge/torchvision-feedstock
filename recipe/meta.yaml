@@ -12,7 +12,10 @@ source:
 build:
   number: 0
   skip: true  # [not linux64]
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: |
+    export TORCHVISION_INCLUDE=$PREFIX/include/  # [not win]
+    set TORCHVISION_INCLUDE=%LIBRARY_INC%        # [win]
+    {{ PYTHON }} -m pip install . -vv
 
 requirements:
   build:
