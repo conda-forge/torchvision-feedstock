@@ -4,9 +4,23 @@ channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
+cxx_compiler:
+- gxx
+cxx_compiler_version:
+- '9'
 docker_image:
 - quay.io/condaforge/linux-anvil-comp7
+libjpeg_turbo:
+- '2'
+libpng:
+- '1.6'
+numpy:
+- '1.16'
 pin_run_as_build:
+  libjpeg_turbo:
+    max_pin: x
+  libpng:
+    max_pin: x.x
   python:
     min_pin: x.x
     max_pin: x.x
@@ -17,3 +31,5 @@ target_platform:
 zip_keys:
 - - cdt_name
   - docker_image
+- - python
+  - numpy

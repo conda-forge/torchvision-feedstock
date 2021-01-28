@@ -3,7 +3,7 @@ About torchvision
 
 Home: http://pytorch.org/
 
-Package license: BSD 3-Clause
+Package license: BSD-3-Clause
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/torchvision-feedstock/blob/master/LICENSE.txt)
 
@@ -151,5 +151,7 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
+* [@h-vetinari](https://github.com/h-vetinari/)
+* [@hmaarrfk](https://github.com/hmaarrfk/)
 * [@nehaljwani](https://github.com/nehaljwani/)
 
