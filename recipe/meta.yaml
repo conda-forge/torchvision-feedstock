@@ -1,4 +1,7 @@
 {% set version = "0.8.2" %}
+{% set number = 0 %}
+# see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
+{% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
 package:
   name: torchvision
@@ -14,47 +17,80 @@ source:
     - patches/0001-skip-flaky-test.patch
 
 build:
-  number: 0
-  skip: true  # [not linux64]
-  script: |
-    export TORCHVISION_INCLUDE=$PREFIX/include/  # [not win]
-    set TORCHVISION_INCLUDE=%LIBRARY_INC%        # [win]
-    {{ PYTHON }} -m pip install . -vv
+  number: {{ number }}
+  skip: true  # [not linux]
 
 requirements:
   build:
     - {{ compiler('cxx') }}
-  host:
-    - python
-    - pip
-    - setuptools
-    # split off image/video into separate outputs?
-    - jpeg
-    - libpng
-    # ffmpeg
-    - numpy
-    - pillow >=4.1.1
-    - pytorch
-  run:
-    - python
-    - pytorch
-    - {{ pin_compatible('numpy') }}
-    - pillow >=4.1.1
 
-test:
-  requires:
-    - pytest
-    - scipy
-  source_files:
-    - test
-  imports:
-    - torchvision
-    - torchvision.datasets
-    - torchvision.models
-    - torchvision.transforms
-    - torchvision.utils
-  commands:
-    - pytest test/
+build:
+  number: 0
+  skip: true  # [not linux64]
+
+outputs:
+  - name: torchvision
+    script: |
+      export TORCHVISION_INCLUDE=$PREFIX/include/  # [not win]
+      set TORCHVISION_INCLUDE=%LIBRARY_INC%        # [win]
+      {{ PYTHON }} -m pip install . -vv
+    build:
+      string: "h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
+      string: "cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      run_exports:
+        # ensure matching proc-type
+        - torchvision =*=*_{{ torch_proc_type }}
+
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}         # [cuda_compiler_version != "None"]
+      host:
+        - python
+        - pip
+        - setuptools
+        - cudnn                          # [cuda_compiler_version != "None"]
+        # split off image/video into separate outputs?
+        - jpeg
+        - libpng
+        # ffmpeg
+        - numpy
+        - pillow >=4.1.1
+        - pytorch
+      run:
+        - python
+        - pytorch
+        - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
+        - {{ pin_compatible('numpy') }}
+        - pillow >=4.1.1
+
+    test:
+      requires:
+        - pytest
+        - scipy
+      source_files:
+        - test
+      imports:
+        - torchvision
+        - torchvision.datasets
+        - torchvision.models
+        - torchvision.transforms
+        - torchvision.utils
+      commands:
+        - pytest test/
+
+  # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
+  # https://anaconda.org/pytorch/torchvision-cpu/files
+  - name: torchvision-cpu
+    build:
+      skip: true  # [cuda_compiler_version != "None"]
+    requirements:
+      run:
+        - torchvision ={{ version }}=*_cpu
+    test:
+      imports:
+        - torchvision
 
 about:
   home: http://pytorch.org/
