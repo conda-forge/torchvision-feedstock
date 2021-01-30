@@ -30,10 +30,11 @@ build:
 
 outputs:
   - name: torchvision
-    script: |
-      export TORCHVISION_INCLUDE=$PREFIX/include/  # [not win]
-      set TORCHVISION_INCLUDE=%LIBRARY_INC%        # [win]
-      {{ PYTHON }} -m pip install . -vv
+    script:
+      commands: |
+        export TORCHVISION_INCLUDE=$PREFIX/include/  # [not win]
+        set TORCHVISION_INCLUDE=%LIBRARY_INC%        # [win]
+        {{ PYTHON }} -m pip install . -vv
     build:
       string: "h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
       string: "cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
