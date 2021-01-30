@@ -55,10 +55,10 @@ outputs:
         # ffmpeg
         - numpy
         - pillow >=4.1.1
-        - pytorch
+        - pytorch =*=*{{ torch_proc_type }}
       run:
         - python
-        - pytorch
+        - pytorch =*=*{{ torch_proc_type }}
         - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
