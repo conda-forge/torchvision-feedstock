@@ -56,16 +56,12 @@ outputs:
         - numpy
         - pillow >=4.1.1
         - pytorch =*={{ torch_proc_type }}*
-        # TODO: remove this once it is properly represented in pytorch build metadata
-        - typing_extensions  # [py<38]
       run:
         - python
         - pytorch =*={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
-        # TODO: remove this once it is properly represented in pytorch build metadata
-        - typing_extensions  # [py<38]
 
     test:
       requires:
