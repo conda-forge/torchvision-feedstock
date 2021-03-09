@@ -11,15 +11,6 @@ diff --git a/test/test_models.py b/test/test_models.py
 index faa14f8..ebc7ec5 100644
 --- a/test/test_models.py
 +++ b/test/test_models.py
-@@ -174,7 +174,7 @@ class ModelTester(TestCase):
-             # compare results with mean and std
-             if name == "maskrcnn_resnet50_fpn":
-                 test_value = map_nested_tensor_object(out, tensor_map_fn=compute_mean_std)
--                # mean values are small, use large prec
-+                mean values are small, use large prec
-                 self.assertExpected(test_value, prec=.01, strip_suffix="_" + dev)
-             else:
-                 self.assertExpected(map_nested_tensor_object(out, tensor_map_fn=subsample_tensor),
 @@ -182,6 +182,9 @@ class ModelTester(TestCase):
                                      strip_suffix="_" + dev)
  
