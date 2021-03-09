@@ -1,42 +1,98 @@
-{% set version = "0.2.1" %}
+{% set version = "0.8.2" %}
+{% set number = 0 %}
+# see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
+{% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
 package:
-  name: torchvision
+  name: torchvision-split
   version: {{ version }}
 
 source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 91f1e21121dca7e14ec35b5f2127da77c8c52e61d39957ab5dd4a719a837a04c
+  sha256: 9a866c3c8feb23b3221ce261e6153fc65a98ce9ceaa71ccad017016945c178bf
+  patches:
+    # skip failing test thats already marked as flaky upstream, see
+    # https://github.com/pytorch/vision/blob/v0.8.2/test/test_models.py#L90
+    - patches/0001-skip-flaky-test.patch
 
 build:
-  number: 1000
-  skip: True  # [not linux64]
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  number: {{ number }}
+  skip: true  # [not linux]
 
 requirements:
   build:
-    - python
-    - setuptools
+    - {{ compiler('cxx') }}
 
-  run:
-    - python
-    - pillow >=4.1.1
-    - numpy >=1.11
-    - pytorch >=0.3
-    - six
+build:
+  number: 0
+  skip: true  # [not linux64]
 
-test:
-  imports:
-    - torchvision
-    - torchvision.datasets
-    - torchvision.models
-    - torchvision.transforms
-    - torchvision.utils
+outputs:
+  - name: torchvision
+    script: build-torch.sh   # [not win]
+    script: build-torch.bat  # [win]
+    build:
+      string: "h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
+      string: "cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      run_exports:
+        # ensure matching proc-type
+        - torchvision =*=*_{{ torch_proc_type }}
+
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}         # [cuda_compiler_version != "None"]
+      host:
+        - python
+        - pip
+        - setuptools
+        - cudnn                          # [cuda_compiler_version != "None"]
+        # split off image/video into separate outputs?
+        - jpeg
+        - libpng
+        # ffmpeg
+        - numpy
+        - pillow >=4.1.1
+        - pytorch =*={{ torch_proc_type }}*
+      run:
+        - python
+        - pytorch =*={{ torch_proc_type }}*
+        - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
+        - {{ pin_compatible('numpy') }}
+        - pillow >=4.1.1
+
+    test:
+      requires:
+        - pytest
+        - scipy
+      source_files:
+        - test
+      imports:
+        - torchvision
+        - torchvision.datasets
+        - torchvision.models
+        - torchvision.transforms
+        - torchvision.utils
+      commands:
+        - pytest test/
+
+  # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
+  # https://anaconda.org/pytorch/torchvision-cpu/files
+  - name: torchvision-cpu
+    build:
+      skip: true  # [cuda_compiler_version != "None"]
+    requirements:
+      run:
+        - torchvision ={{ version }}=*_cpu
+    test:
+      imports:
+        - torchvision
 
 about:
   home: http://pytorch.org/
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
   summary: Image and video datasets and models for torch deep learning
@@ -46,3 +102,6 @@ about:
 extra:
   recipe-maintainers:
     - nehaljwani
+    - hmaarrfk
+    - h-vetinari
+  feedstock-name: torchvision
