@@ -27,10 +27,6 @@ requirements:
     - numpy                                  # [build_platform != target_platform]
     - {{ compiler('cxx') }}
 
-build:
-  number: 0
-  skip: true  # [not linux64]
-
 outputs:
   - name: torchvision
     script: build-torch.sh   # [not win]
