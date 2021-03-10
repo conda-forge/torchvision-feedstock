@@ -18,7 +18,7 @@ source:
 
 build:
   number: {{ number }}
-  skip: true  # [not linux]
+  skip: true  # [win]
 
 requirements:
   build:
