@@ -1,5 +1,5 @@
 {% set version = "0.8.2" %}
-{% set number = 0 %}
+{% set number = 1 %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -29,8 +29,8 @@ outputs:
     script: build-torch.sh   # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: "h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
-      string: "cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      string: "py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
+      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
         - torchvision =*=*_{{ torch_proc_type }}
