@@ -74,7 +74,9 @@ outputs:
         - torchvision.transforms
         - torchvision.utils
       commands:
-        - pytest test/
+        # skip test_url_is_accessible instead of hitting 20+ servers per run, since
+        # each server might be occasionally unresponsive and end up failing our CI
+        - pytest -k "not test_url_is_accessible" test/
 
   # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
   # https://anaconda.org/pytorch/torchvision-cpu/files
