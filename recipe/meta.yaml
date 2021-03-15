@@ -53,9 +53,11 @@ outputs:
         - numpy
         - pillow >=4.1.1
         - pytorch =*={{ torch_proc_type }}*
+        - pytorch >=1.8.0
       run:
         - python
         - pytorch =*={{ torch_proc_type }}*
+        - pytorch >=1.8.0
         - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
