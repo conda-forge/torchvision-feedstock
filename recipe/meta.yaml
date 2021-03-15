@@ -11,10 +11,6 @@ source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 9351ed92aded632f8c7f59dfadac13c191a834babe682f5785ea47e6fcf6b472
-  patches:
-    # skip failing test thats already marked as flaky upstream, see
-    # https://github.com/pytorch/vision/blob/v0.8.2/test/test_models.py#L90
-    - patches/0001-skip-flaky-test.patch
 
 build:
   number: {{ number }}
