@@ -63,6 +63,7 @@ outputs:
     test:
       requires:
         - pytest
+        - requests
         - scipy
       source_files:
         - test
