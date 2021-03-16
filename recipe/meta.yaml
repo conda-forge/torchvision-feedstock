@@ -1,5 +1,5 @@
-{% set version = "0.8.2" %}
-{% set number = 1 %}
+{% set version = "0.9.0" %}
+{% set number = 0 %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -10,11 +10,7 @@ package:
 source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 9a866c3c8feb23b3221ce261e6153fc65a98ce9ceaa71ccad017016945c178bf
-  patches:
-    # skip failing test thats already marked as flaky upstream, see
-    # https://github.com/pytorch/vision/blob/v0.8.2/test/test_models.py#L90
-    - patches/0001-skip-flaky-test.patch
+  sha256: 9351ed92aded632f8c7f59dfadac13c191a834babe682f5785ea47e6fcf6b472
 
 build:
   number: {{ number }}
@@ -39,7 +35,8 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('cuda') }}         # [cuda_compiler_version != "None"]
+        - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
+        - sysroot_linux-64 ==2.17                # [linux64]
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - numpy                                  # [build_platform != target_platform]
@@ -55,10 +52,10 @@ outputs:
         # ffmpeg
         - numpy
         - pillow >=4.1.1
-        - pytorch =*={{ torch_proc_type }}*
+        - pytorch >=1.8.0={{ torch_proc_type }}*
       run:
         - python
-        - pytorch =*={{ torch_proc_type }}*
+        - pytorch >=1.8.0={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
@@ -66,6 +63,7 @@ outputs:
     test:
       requires:
         - pytest
+        - requests
         - scipy
       source_files:
         - test
@@ -76,7 +74,9 @@ outputs:
         - torchvision.transforms
         - torchvision.utils
       commands:
-        - pytest test/
+        # skip test_url_is_accessible instead of hitting 20+ servers per run, since
+        # each server might be occasionally unresponsive and end up failing our CI
+        - pytest -k "not test_url_is_accessible" test/
 
   # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
   # https://anaconda.org/pytorch/torchvision-cpu/files
