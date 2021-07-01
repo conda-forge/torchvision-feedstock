@@ -1,4 +1,4 @@
-{% set version = "0.9.0" %}
+{% set version = "0.9.1" %}
 {% set number = 0 %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
@@ -8,9 +8,11 @@ package:
   version: {{ version }}
 
 source:
-  fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 9351ed92aded632f8c7f59dfadac13c191a834babe682f5785ea47e6fcf6b472
+  sha256: 79964773729880e0eee0e6af13f336041121d4cc8491a3e2c0e5f184cac8a718
+  patches:
+    # partially backport (and adapt) pytorch/vision#3631, can be dropped for v>=0.10.0
+    - patches/0001-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
 
 build:
   number: {{ number }}
@@ -26,7 +28,7 @@ outputs:
     script: build-torch.bat  # [win]
     build:
       string: "py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
-      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
         - torchvision =*=*_{{ torch_proc_type }}
@@ -45,7 +47,7 @@ outputs:
         - python
         - pip
         - setuptools
-        - cudnn                          # [cuda_compiler_version != "None"]
+        - cudnn                                  # [cuda_compiler_version != "None"]
         # split off image/video into separate outputs?
         - jpeg
         - libpng
@@ -56,7 +58,7 @@ outputs:
       run:
         - python
         - pytorch >=1.8.0={{ torch_proc_type }}*
-        - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
+        - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
 
