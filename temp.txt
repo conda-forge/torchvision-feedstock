@@ -42,7 +42,7 @@ The following NEW packages will be INSTALLED:
     openjpeg:          2.4.0-hb52868f_1         conda-forge
     openssl:           1.1.1k-h7f98852_0        conda-forge
     packaging:         20.9-pyh44b312d_0        conda-forge
-    pillow:            8.2.0-py39hf95b381_1     conda-forge
+    pillow:            8.3.0-py39ha612740_0     conda-forge
     pluggy:            0.13.1-py39hf3d152e_4    conda-forge
     py:                1.10.0-pyhd3deb0d_0      conda-forge
     pycparser:         2.20-pyh9f0ad1d_2        conda-forge
