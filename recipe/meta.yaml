@@ -45,7 +45,7 @@ outputs:
         - python
         - pip
         - setuptools
-        - cudnn                          # [cuda_compiler_version != "None"]
+        - cudnn                                  # [cuda_compiler_version != "None"]
         # split off image/video into separate outputs?
         - jpeg
         - libpng
@@ -56,7 +56,7 @@ outputs:
       run:
         - python
         - pytorch >=1.8.0={{ torch_proc_type }}*
-        - {{ pin_compatible('cudnn') }}  # [cuda_compiler_version != "None"]
+        - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1
 
