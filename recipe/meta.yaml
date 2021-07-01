@@ -1,5 +1,5 @@
 {% set version = "0.9.1" %}
-{% set number = 0 %}
+{% set number = 1 %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -53,14 +53,14 @@ outputs:
         - libpng
         # ffmpeg
         - numpy
-        - pillow >=4.1.1
+        - pillow >=4.1.1,<8.3
         - pytorch >=1.8.0={{ torch_proc_type }}*
       run:
         - python
         - pytorch >=1.8.0={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=4.1.1
+        - pillow >=4.1.1,<8.3
 
     test:
       requires:
