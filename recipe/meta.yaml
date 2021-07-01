@@ -11,6 +11,11 @@ source:
   fn: torchvision-{{ version }}.tar.gz
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 79964773729880e0eee0e6af13f336041121d4cc8491a3e2c0e5f184cac8a718
+  patches:
+    # the following two patches are a backport of pytorch/vision#3631,
+    # can be dropped for v>=0.10.0
+    - patches/0001-new-image.patch
+    - patches/0002-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
 
 build:
   number: {{ number }}
