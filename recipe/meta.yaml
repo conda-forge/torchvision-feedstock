@@ -1,5 +1,4 @@
-{% set version = "0.9.1" %}
-{% set number = 1 %}
+{% set version = "0.10.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -9,13 +8,10 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 79964773729880e0eee0e6af13f336041121d4cc8491a3e2c0e5f184cac8a718
-  patches:
-    # partially backport (and adapt) pytorch/vision#3631, can be dropped for v>=0.10.0
-    - patches/0001-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
+  sha256: 82bb2c2b03d8a65f4ea74bb0ee5566b0876a1992aceefb1e11475c7b5d2e857b
 
 build:
-  number: {{ number }}
+  number: 0
   skip: true  # [win]
 
 requirements:
@@ -24,11 +20,11 @@ requirements:
 
 outputs:
   - name: torchvision
-    script: build-torch.sh   # [not win]
+    script: build-torch.sh  # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: "py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
-      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}                                                  # [cuda_compiler_version == "None"]
+      string: py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
         - torchvision =*=*_{{ torch_proc_type }}
@@ -53,14 +49,15 @@ outputs:
         - libpng
         # ffmpeg
         - numpy
-        - pillow >=4.1.1,<8.3
+        # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow#5571
+        - pillow >=5.3.0,!=8.3.0
         - pytorch >=1.8.0={{ torch_proc_type }}*
       run:
         - python
         - pytorch >=1.8.0={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=4.1.1,<8.3
+        - pillow >=5.3.0,!=8.3.0
 
     test:
       requires:
