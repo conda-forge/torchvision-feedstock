@@ -9,9 +9,6 @@ package:
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 82bb2c2b03d8a65f4ea74bb0ee5566b0876a1992aceefb1e11475c7b5d2e857b
-  patches:
-    # partially backport (and adapt) pytorch/vision#3631, can be dropped for v>=0.10.0
-    - patches/0001-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
 
 build:
   number: 0
