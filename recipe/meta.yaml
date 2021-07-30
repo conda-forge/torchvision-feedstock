@@ -53,14 +53,14 @@ outputs:
         # ffmpeg
         - numpy
         # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
-        - pillow >=4.1.1,!=8.3.0
+        - pillow >=4.1.1,<8.3
         - pytorch >=1.8.0={{ torch_proc_type }}*
       run:
         - python
         - pytorch >=1.8.0={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=4.1.1,!=8.3.0
+        - pillow >=4.1.1,<8.3
 
     test:
       requires:
