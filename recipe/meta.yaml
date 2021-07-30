@@ -80,18 +80,6 @@ outputs:
         # each server might be occasionally unresponsive and end up failing our CI
         - pytest -k "not test_url_is_accessible" test/
 
-  # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
-  # https://anaconda.org/pytorch/torchvision-cpu/files
-  - name: torchvision-cpu
-    build:
-      skip: true  # [cuda_compiler_version != "None"]
-    requirements:
-      run:
-        - torchvision ={{ version }}=*_cpu
-    test:
-      imports:
-        - torchvision
-
 about:
   home: http://pytorch.org/
   license: BSD-3-Clause
