@@ -80,7 +80,7 @@ outputs:
         # skip test_url_is_accessible instead of hitting 20+ servers per run, since
         # each server might be occasionally unresponsive and end up failing our CI
         {% set tests_to_skip = "test_url_is_accessible" %}
-        # osx does not support nnpack, see conda-forge/pytorch-cpu-feedstock#56
+        # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
         {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
         - pytest -k "not ({{ tests_to_skip }})" test/
 
