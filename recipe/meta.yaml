@@ -66,6 +66,7 @@ outputs:
     test:
       requires:
         - pytest
+        - av
         - requests
         - scipy
       source_files:
