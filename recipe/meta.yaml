@@ -1,5 +1,4 @@
 {% set version = "0.9.1" %}
-{% set number = 1 %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -15,7 +14,7 @@ source:
     - patches/0001-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
 
 build:
-  number: {{ number }}
+  number: 1
   skip: true  # [win]
 
 requirements:
@@ -27,8 +26,8 @@ outputs:
     script: build-torch.sh   # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: "py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"                                                  # [cuda_compiler_version == "None"]
-      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ number }}_{{ torch_proc_type }}"  # [cuda_compiler_version != "None"]
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}                                                  # [cuda_compiler_version == "None"]
+      string: py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
         - torchvision =*=*_{{ torch_proc_type }}
@@ -53,11 +52,16 @@ outputs:
         - libpng
         # ffmpeg
         - numpy
+        # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=4.1.1,<8.3
-        - pytorch >=1.8.0={{ torch_proc_type }}*
+        - pytorch
+        - pytorch-gpu    # [cuda_compiler_version != "None"]
+        - pytorch-cpu    # [cuda_compiler_version == "None"]
       run:
         - python
-        - pytorch >=1.8.0={{ torch_proc_type }}*
+        - pytorch
+        - pytorch-gpu    # [cuda_compiler_version != "None"]
+        - pytorch-cpu    # [cuda_compiler_version == "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1,<8.3
@@ -78,19 +82,10 @@ outputs:
       commands:
         # skip test_url_is_accessible instead of hitting 20+ servers per run, since
         # each server might be occasionally unresponsive and end up failing our CI
-        - pytest -k "not test_url_is_accessible" test/
-
-  # for compatibility with (& ease of migration from) old packages in the pytorch channel, see
-  # https://anaconda.org/pytorch/torchvision-cpu/files
-  - name: torchvision-cpu
-    build:
-      skip: true  # [cuda_compiler_version != "None"]
-    requirements:
-      run:
-        - torchvision ={{ version }}=*_cpu
-    test:
-      imports:
-        - torchvision
+        {% set tests_to_skip = "test_url_is_accessible" %}
+        # osx does not support nnpack, see conda-forge/pytorch-cpu-feedstock#56
+        {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
+        - pytest -k "not ({{ tests_to_skip }})" test/
 
 about:
   home: http://pytorch.org/
