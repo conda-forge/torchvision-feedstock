@@ -1,4 +1,4 @@
-{% set version = "0.9.1" %}
+{% set version = "0.10.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -8,13 +8,13 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 79964773729880e0eee0e6af13f336041121d4cc8491a3e2c0e5f184cac8a718
+  sha256: 82bb2c2b03d8a65f4ea74bb0ee5566b0876a1992aceefb1e11475c7b5d2e857b
   patches:
-    # partially backport (and adapt) pytorch/vision#3631, can be dropped for v>=0.10.0
-    - patches/0001-avoid-check-if-pil-version-is-8.2-as-the-reference-i.patch
+    # compatibility with pillow >=8.3.0,<8.3.2; can be dropped once 8.3.2 arrives (then update range below!)
+    - patches/0001-Don-t-check-transparency-channel-for-pil-8.3-in-test.patch
 
 build:
-  number: 1
+  number: 0
   skip: true  # [win]
 
 requirements:
@@ -53,22 +53,23 @@ outputs:
         # ffmpeg
         - numpy
         # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
-        - pillow >=4.1.1,<8.3
+        - pillow >=5.3.0,!=8.3.0
         - pytorch
-        - pytorch-gpu    # [cuda_compiler_version != "None"]
-        - pytorch-cpu    # [cuda_compiler_version == "None"]
+        - pytorch-gpu                           # [cuda_compiler_version != "None"]
+        - pytorch-cpu                           # [cuda_compiler_version == "None"]
       run:
         - python
         - pytorch
-        - pytorch-gpu    # [cuda_compiler_version != "None"]
-        - pytorch-cpu    # [cuda_compiler_version == "None"]
+        - pytorch-gpu                            # [cuda_compiler_version != "None"]
+        - pytorch-cpu                            # [cuda_compiler_version == "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=4.1.1,<8.3
+        - pillow >=5.3.0,!=8.3.0
 
     test:
       requires:
         - pytest
+        - av
         - requests
         - scipy
       source_files:
@@ -83,7 +84,7 @@ outputs:
         # skip test_url_is_accessible instead of hitting 20+ servers per run, since
         # each server might be occasionally unresponsive and end up failing our CI
         {% set tests_to_skip = "test_url_is_accessible" %}
-        # osx does not support nnpack, see conda-forge/pytorch-cpu-feedstock#56
+        # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
         {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
         - pytest -k "not ({{ tests_to_skip }})" test/
 

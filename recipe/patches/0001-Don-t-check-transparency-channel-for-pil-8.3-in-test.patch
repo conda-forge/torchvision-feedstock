@@ -1,0 +1,47 @@
+From 88d28695deaf8c8d89bd02ec5c89e91422a1afca Mon Sep 17 00:00:00 2001
+From: Nicolas Hug <nicolashug@fb.com>
+Date: Mon, 12 Jul 2021 14:26:01 +0100
+Subject: [PATCH] Don't check transparency channel for pil >= 8.3 in
+ test_decode_png (#4167)
+
+---
+ test/test_image.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/test/test_image.py b/test/test_image.py
+index eae4a147..ba7ccce3 100644
+--- a/test/test_image.py
++++ b/test/test_image.py
+@@ -8,7 +8,7 @@ from pathlib import Path
+ import pytest
+ import numpy as np
+ import torch
+-from PIL import Image
++from PIL import Image, __version__ as PILLOW_VERSION
+ import torchvision.transforms.functional as F
+ from common_utils import get_tmp_dir, needs_cuda, cpu_only
+ from _assert_utils import assert_equal
+@@ -23,6 +23,7 @@ IMAGE_DIR = os.path.join(FAKEDATA_DIR, "imagefolder")
+ DAMAGED_JPEG = os.path.join(IMAGE_ROOT, 'damaged_jpeg')
+ ENCODE_JPEG = os.path.join(IMAGE_ROOT, "encode_jpeg")
+ IS_WINDOWS = sys.platform in ('win32', 'cygwin')
++PILLOW_VERSION = tuple(int(x) for x in PILLOW_VERSION.split('.'))
+ 
+ 
+ def _get_safe_image_name(name):
+@@ -120,6 +121,12 @@ class ImageTester(unittest.TestCase):
+                 img_lpng = decode_image(data, mode=mode)
+ 
+                 tol = 0 if conversion is None else 1
++                if PILLOW_VERSION >= (8, 3) and pil_mode == "LA":
++                    # Avoid checking the transparency channel until
++                    # https://github.com/python-pillow/Pillow/issues/5593#issuecomment-878244910
++                    # is fixed.
++                    # TODO: remove once fix is released in PIL. Should be > 8.3.1.
++                    img_lpng, img_pil = img_lpng[0], img_pil[0]
+                 self.assertTrue(img_lpng.allclose(img_pil, atol=tol))
+ 
+         with self.assertRaises(RuntimeError):
+-- 
+2.31.1.windows.1
+
