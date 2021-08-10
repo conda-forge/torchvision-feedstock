@@ -55,9 +55,13 @@ outputs:
         # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=4.1.1,<8.3
         - pytorch
+        - pytorch-gpu    # [cuda_compiler_version != "None"]
+        - pytorch-cpu    # [cuda_compiler_version == "None"]
       run:
         - python
         - pytorch
+        - pytorch-gpu    # [cuda_compiler_version != "None"]
+        - pytorch-cpu    # [cuda_compiler_version == "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=4.1.1,<8.3
