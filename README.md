@@ -226,7 +226,6 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-torchvision-green.svg)](https://anaconda.org/conda-forge/torchvision) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/torchvision.svg)](https://anaconda.org/conda-forge/torchvision) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/torchvision.svg)](https://anaconda.org/conda-forge/torchvision) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/torchvision.svg)](https://anaconda.org/conda-forge/torchvision) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-torchvision--cpu-green.svg)](https://anaconda.org/conda-forge/torchvision-cpu) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/torchvision-cpu.svg)](https://anaconda.org/conda-forge/torchvision-cpu) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/torchvision-cpu.svg)](https://anaconda.org/conda-forge/torchvision-cpu) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/torchvision-cpu.svg)](https://anaconda.org/conda-forge/torchvision-cpu) |
 
 Installing torchvision
 ======================
@@ -238,10 +237,10 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `torchvision, torchvision-cpu` can be installed with:
+Once the `conda-forge` channel has been enabled, `torchvision` can be installed with:
 
 ```
-conda install torchvision torchvision-cpu
+conda install torchvision
 ```
 
 It is possible to list all of the versions of `torchvision` available on your platform with:
