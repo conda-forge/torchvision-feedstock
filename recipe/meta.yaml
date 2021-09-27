@@ -1,4 +1,3 @@
-{% set tests_to_skip = "test_url_is_accessible" %}
 {% set version = "0.10.1" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
@@ -24,10 +23,10 @@ requirements:
 
 outputs:
   - name: torchvision
-    script: build-torch.sh  # [not win]
+    script: build-torch.sh   # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version == "None"]
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}                                                  # [cuda_compiler_version == "None"]
       string: py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
