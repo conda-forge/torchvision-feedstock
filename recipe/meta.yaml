@@ -50,9 +50,9 @@ outputs:
         - libpng
         # ffmpeg
         - numpy
-        # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
-        - pillow >=5.3.0,!=8.3.0
-        - pytorch
+        # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
+        - pillow >=5.3.0,!=8.3.0,!=8.3.1
+        - pytorch 1.10
         - pytorch-gpu                           # [cuda_compiler_version != "None"]
         - pytorch-cpu                           # [cuda_compiler_version == "None"]
       run:
