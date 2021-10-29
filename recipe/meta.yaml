@@ -71,6 +71,7 @@ outputs:
         - av
         - requests
         - scipy
+        - pytest-mock
       source_files:
         - test
       imports:
