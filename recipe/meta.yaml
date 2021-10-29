@@ -91,6 +91,10 @@ outputs:
         # This test seems to just destroy the memory of the system.
         {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
         {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
+        # 2021/10/29 hmaarrfk
+        # CIs do not have enough resources to run the full suite of model tests
+        - rm -f test/test_models.py  # [unix]
+        - del /f test\test_models.py  # [win]
         - pytest --verbose -k "not ({{ tests_to_skip }})" test/
 
 about:
