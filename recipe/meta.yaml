@@ -85,6 +85,10 @@ outputs:
         {% set tests_to_skip = "test_url_is_accessible" %}
         # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
         {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
+        # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
+        # It seems to fail around testing of vgg
+        # This test seems to just destroy the memory of the system.
+        {% set tests_to_skip = tests_to_skip " + or test_forward_backward" %}
         - pytest --verbose -k "not ({{ tests_to_skip }})" test/
 
 about:
