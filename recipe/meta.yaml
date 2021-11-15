@@ -9,9 +9,6 @@ package:
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 32a06ccf755e4d75006ce03701f207652747a63dbfdf65f0f20a1b6f93a2e834
-  patches:
-    # compatibility with pillow >=8.3.0,<8.3.2; can be dropped once 8.3.2 arrives (then update range below!)
-    - patches/0001-Don-t-check-transparency-channel-for-pil-8.3-in-test.patch
 
 build:
   number: 0
