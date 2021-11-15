@@ -39,6 +39,9 @@ outputs:
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - numpy                                  # [build_platform != target_platform]
         - pytorch =*={{ torch_proc_type }}*      # [build_platform != target_platform]
+        - ffmpeg >=4.2  # [not win]
+        - jpeg
+        - libpng
       host:
         - python
         - pip
@@ -47,27 +50,31 @@ outputs:
         # split off image/video into separate outputs?
         - jpeg
         - libpng
-        # ffmpeg
-        - numpy
-        # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
-        - pillow >=5.3.0,!=8.3.0
+        - ffmpeg >=4.2
+        - numpy >=1.11
+        - pillow >=5.3.0
         - pytorch
         - pytorch-gpu                           # [cuda_compiler_version != "None"]
         - pytorch-cpu                           # [cuda_compiler_version == "None"]
       run:
         - python
+        - libpng
+        - ffmpeg >=4.2
+        - jpeg
         - pytorch
         - pytorch-gpu                            # [cuda_compiler_version != "None"]
         - pytorch-cpu                            # [cuda_compiler_version == "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=5.3.0,!=8.3.0
+        - pillow >=5.3.0
 
     test:
       requires:
         - pytest
         - av
         - requests
+        - jpeg
+        - ca-certificates
         - scipy
       source_files:
         - test
@@ -75,8 +82,6 @@ outputs:
         - torchvision
         - torchvision.datasets
         - torchvision.models
-        - torchvision.transforms
-        - torchvision.utils
       commands:
         # skip test_url_is_accessible instead of hitting 20+ servers per run, since
         # each server might be occasionally unresponsive and end up failing our CI
