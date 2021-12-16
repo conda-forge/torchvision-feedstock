@@ -1,5 +1,5 @@
 {% set tests_to_skip = "test_url_is_accessible" %}
-{% set version = "0.11.1" %}
+{% set version = "0.11.2" %}
 {% set pytorch_version = "1.10.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 32a06ccf755e4d75006ce03701f207652747a63dbfdf65f0f20a1b6f93a2e834
+  sha256: 55689c57c29f82438a133d0af3315991037be59c8e02471bdcaa31731154a714
 
 build:
   number: 0
