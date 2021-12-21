@@ -1,0 +1,25 @@
+From 08c23bd84c546334710c579f5eb00b308121a3d8 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 21 Dec 2021 17:16:40 +1100
+Subject: [PATCH] avoid hard-coded gcc
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 4c9e734f3..5f13168f1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -384,7 +384,7 @@ def get_extensions():
+ 
+         gcc = distutils.spawn.find_executable('gcc')
+         platform_tag = subprocess.run(
+-            [gcc, '-print-multiarch'], stdout=subprocess.PIPE)
++            [os.environ["CC"], '-print-multiarch'], stdout=subprocess.PIPE)
+         platform_tag = platform_tag.stdout.strip().decode('utf-8')
+ 
+         if platform_tag:
+-- 
+2.32.0.windows.2
+
