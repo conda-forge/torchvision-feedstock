@@ -1,5 +1,5 @@
-{% set tests_to_skip = "test_url_is_accessible" %}
 {% set version = "0.11.2" %}
+# waiting for https://github.com/conda-forge/conda-forge-pinning-feedstock/pull/1890
 {% set pytorch_version = "1.10.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
