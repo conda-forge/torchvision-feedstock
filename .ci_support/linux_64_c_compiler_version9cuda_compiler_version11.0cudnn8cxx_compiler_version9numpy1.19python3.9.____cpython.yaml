@@ -20,6 +20,8 @@ cxx_compiler_version:
 - '9'
 docker_image:
 - quay.io/condaforge/linux-anvil-cuda:11.0
+ffmpeg:
+- '4.3'
 jpeg:
 - '9'
 libpng:
