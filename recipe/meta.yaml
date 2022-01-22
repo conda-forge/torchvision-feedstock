@@ -104,6 +104,20 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_smoke" %}
         {% set tests_to_skip = tests_to_skip + " or test_str_smoke" %}
         {% set tests_to_skip = tests_to_skip + " or test_transforms" %}
+        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler_unequal" %}
+        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler_insufficient_clips" %}
+        {% set tests_to_skip = tests_to_skip + " or test_distributed_sampler_and_uniform_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_video_clips" %}
+        {% set tests_to_skip = tests_to_skip + " or test_write_read_video" %}
+        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_file" %}
+        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_memory" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_from_packet" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_video_pts_unit_sec" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_pts_unit_sec" %}
+        {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
         # 2021/10/29 hmaarrfk
         # CIs do not have enough resources to run the full suite of model tests
         - rm -f test/test_models.py  # [unix]
