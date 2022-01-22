@@ -1,4 +1,6 @@
-{% set version = "0.10.1" %}
+{% set version = "0.11.2" %}
+# waiting for https://github.com/conda-forge/conda-forge-pinning-feedstock/pull/1890
+{% set pytorch_version = "1.10.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -8,10 +10,9 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 4d595cf0214c8adc817f8e3cd0043a027b52b481e05d67b04f4947fcb43d4277
+  sha256: 55689c57c29f82438a133d0af3315991037be59c8e02471bdcaa31731154a714
   patches:
-    # compatibility with pillow >=8.3.0,<8.3.2; can be dropped once 8.3.2 arrives (then update range below!)
-    - patches/0001-Don-t-check-transparency-channel-for-pil-8.3-in-test.patch
+    - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
   number: 0
@@ -23,10 +24,10 @@ requirements:
 
 outputs:
   - name: torchvision
-    script: build-torch.sh   # [not win]
+    script: build-torch.sh  # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}                                                  # [cuda_compiler_version == "None"]
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version == "None"]
       string: py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace('.', '') }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ torch_proc_type }}  # [cuda_compiler_version != "None"]
       run_exports:
         # ensure matching proc-type
@@ -41,7 +42,7 @@ outputs:
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - numpy                                  # [build_platform != target_platform]
-        - pytorch =*={{ torch_proc_type }}*      # [build_platform != target_platform]
+        - pytorch ={{ pytorch_version }}={{ torch_proc_type }}*      # [build_platform != target_platform]
       host:
         - python
         - pip
@@ -50,21 +51,22 @@ outputs:
         # split off image/video into separate outputs?
         - jpeg
         - libpng
-        # ffmpeg
+        - ffmpeg
         - numpy
-        # exclude 8.3.0 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
-        - pillow >=5.3.0,!=8.3.0
-        - pytorch
+        # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
+        - pillow >=5.3.0,!=8.3.0,!=8.3.1
+        - pytorch {{ pytorch_version }}
         - pytorch-gpu                           # [cuda_compiler_version != "None"]
         - pytorch-cpu                           # [cuda_compiler_version == "None"]
       run:
         - python
-        - pytorch
+        - pytorch {{ pytorch_version }}
         - pytorch-gpu                            # [cuda_compiler_version != "None"]
         - pytorch-cpu                            # [cuda_compiler_version == "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
-        - pillow >=5.3.0,!=8.3.0
+        - pillow >=5.3.0,!=8.3.0,!=8.3.1
+        - ffmpeg
 
     test:
       requires:
@@ -72,6 +74,7 @@ outputs:
         - av
         - requests
         - scipy
+        - pytest-mock
       source_files:
         - test
       imports:
@@ -86,7 +89,45 @@ outputs:
         {% set tests_to_skip = "test_url_is_accessible" %}
         # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
         {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
-        - pytest -k "not ({{ tests_to_skip }})" test/
+        # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
+        # It seems to fail around testing of vgg
+        # This test seems to just destroy the memory of the system.
+        {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
+        {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
+        # 2022/02/22 hmaarrfk
+        # The following tests seem to be broken due to a bug between av and ffmpeg
+        # https://github.com/conda-forge/torchvision-feedstock/pull/34#issuecomment-1019347106
+        # https://github.com/conda-forge/av-feedstock/pull/43
+        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
+        {% set tests_to_skip = tests_to_skip + " or test_feature_types" %}
+        {% set tests_to_skip = tests_to_skip + " or test_num_examples" %}
+        {% set tests_to_skip = tests_to_skip + " or test_smoke" %}
+        {% set tests_to_skip = tests_to_skip + " or test_str_smoke" %}
+        {% set tests_to_skip = tests_to_skip + " or test_transforms" %}
+        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler_unequal" %}
+        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler_insufficient_clips" %}
+        {% set tests_to_skip = tests_to_skip + " or test_distributed_sampler_and_uniform_clip_sampler" %}
+        {% set tests_to_skip = tests_to_skip + " or test_video_clips" %}
+        {% set tests_to_skip = tests_to_skip + " or test_write_read_video" %}
+        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_file" %}
+        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_memory" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_from_packet" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_video_pts_unit_sec" %}
+        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_pts_unit_sec" %}
+        {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
+        # 2022/02/22 hmaarrfk
+        # While av partially works on linux, it fails a little harder on osx
+        # Therefore we need to skip a few more tests relating to loading videos
+        {% set tests_to_skip = tests_to_skip + " or test_classes" %}        # [osx]
+        {% set tests_to_skip = tests_to_skip + " or test_is_valid_file" %}  # [osx]
+        # 2021/10/29 hmaarrfk
+        # CIs do not have enough resources to run the full suite of model tests
+        - rm -f test/test_models.py  # [unix]
+        - del /f test\test_models.py  # [win]
+        - pytest --verbose -k "not ({{ tests_to_skip }})" test/
 
 about:
   home: http://pytorch.org/
