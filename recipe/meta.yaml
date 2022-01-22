@@ -94,6 +94,16 @@ outputs:
         # This test seems to just destroy the memory of the system.
         {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
         {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
+        # 2022/02/22 hmaarrfk
+        # The following tests seem to be broken due to a bug between av and ffmpeg
+        # https://github.com/conda-forge/torchvision-feedstock/pull/34#issuecomment-1019347106
+        # https://github.com/conda-forge/av-feedstock/pull/43
+        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
+        {% set tests_to_skip = tests_to_skip + " or test_feature_types" %}
+        {% set tests_to_skip = tests_to_skip + " or test_num_examples" %}
+        {% set tests_to_skip = tests_to_skip + " or test_smoke" %}
+        {% set tests_to_skip = tests_to_skip + " or test_str_smoke" %}
+        {% set tests_to_skip = tests_to_skip + " or test_transforms" %}
         # 2021/10/29 hmaarrfk
         # CIs do not have enough resources to run the full suite of model tests
         - rm -f test/test_models.py  # [unix]
