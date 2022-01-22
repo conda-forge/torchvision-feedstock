@@ -118,6 +118,11 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_read_video_pts_unit_sec" %}
         {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_pts_unit_sec" %}
         {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
+        # 2022/02/22 hmaarrfk
+        # While av partially works on linux, it fails a little harder on osx
+        # Therefore we need to skip a few more tests relating to loading videos
+        {% set tests_to_skip = tests_to_skip + " or test_classes" %}        # [osx]
+        {% set tests_to_skip = tests_to_skip + " or test_is_valid_file" %}  # [osx]
         # 2021/10/29 hmaarrfk
         # CIs do not have enough resources to run the full suite of model tests
         - rm -f test/test_models.py  # [unix]
