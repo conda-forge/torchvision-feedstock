@@ -15,7 +15,7 @@ source:
     - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
 
 requirements:
@@ -75,6 +75,9 @@ outputs:
         - requests
         - scipy
         - pytest-mock
+        # For some reason, av does not play well with ffmpeg 4.4
+        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
+        - ffmpeg 4.3
       source_files:
         - test
       imports:
@@ -94,35 +97,6 @@ outputs:
         # This test seems to just destroy the memory of the system.
         {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
         {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
-        # 2022/02/22 hmaarrfk
-        # The following tests seem to be broken due to a bug between av and ffmpeg
-        # https://github.com/conda-forge/torchvision-feedstock/pull/34#issuecomment-1019347106
-        # https://github.com/conda-forge/av-feedstock/pull/43
-        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
-        {% set tests_to_skip = tests_to_skip + " or test_feature_types" %}
-        {% set tests_to_skip = tests_to_skip + " or test_num_examples" %}
-        {% set tests_to_skip = tests_to_skip + " or test_smoke" %}
-        {% set tests_to_skip = tests_to_skip + " or test_str_smoke" %}
-        {% set tests_to_skip = tests_to_skip + " or test_transforms" %}
-        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler" %}
-        {% set tests_to_skip = tests_to_skip + " or test_random_clip_sampler_unequal" %}
-        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler" %}
-        {% set tests_to_skip = tests_to_skip + " or test_uniform_clip_sampler_insufficient_clips" %}
-        {% set tests_to_skip = tests_to_skip + " or test_distributed_sampler_and_uniform_clip_sampler" %}
-        {% set tests_to_skip = tests_to_skip + " or test_video_clips" %}
-        {% set tests_to_skip = tests_to_skip + " or test_write_read_video" %}
-        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_file" %}
-        {% set tests_to_skip = tests_to_skip + " or test_probe_video_from_memory" %}
-        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps" %}
-        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_from_packet" %}
-        {% set tests_to_skip = tests_to_skip + " or test_read_video_pts_unit_sec" %}
-        {% set tests_to_skip = tests_to_skip + " or test_read_timestamps_pts_unit_sec" %}
-        {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
-        # 2022/02/22 hmaarrfk
-        # While av partially works on linux, it fails a little harder on osx
-        # Therefore we need to skip a few more tests relating to loading videos
-        {% set tests_to_skip = tests_to_skip + " or test_classes" %}        # [osx]
-        {% set tests_to_skip = tests_to_skip + " or test_is_valid_file" %}  # [osx]
         # 2021/10/29 hmaarrfk
         # CIs do not have enough resources to run the full suite of model tests
         - rm -f test/test_models.py  # [unix]
