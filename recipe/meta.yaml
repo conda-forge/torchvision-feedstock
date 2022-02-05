@@ -1,4 +1,5 @@
-{% set version = "0.11.2" %}
+{% set tests_to_skip = "test_url_is_accessible" %}
+{% set version = "0.11.3" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -8,13 +9,13 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 55689c57c29f82438a133d0af3315991037be59c8e02471bdcaa31731154a714
+  sha256: b4c51d27589783e6e6941ecaa67b55f6f41633874ec37f80b64a0c92c3196e0c
   patches:
     # https://github.com/pytorch/vision/pull/5261
     - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
-  number: 3
+  number: 0
   skip: true  # [win]
 
 requirements:
@@ -26,7 +27,7 @@ outputs:
     script: build-torch.sh  # [not win]
     script: build-torch.bat  # [win]
     build:
-      string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}   # [cuda_compiler_version == "None"]
+      string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
       string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
     requirements:
       build:
