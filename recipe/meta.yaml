@@ -61,6 +61,14 @@ outputs:
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
       run_constrained:
+        # While conda packaging seems to allow us to specify
+        # constraints on the same package in different lines
+        # the resulting package doesn't have the ability to
+        # be specified in multiples lines
+        # This makes it tricky to use run_exports
+        # we add the GPU constraint in the run_constrained
+        # to allow us to have "two" constraints on the
+        # running package
         - pytorch =*={{ torch_proc_type }}*
 
     test:
