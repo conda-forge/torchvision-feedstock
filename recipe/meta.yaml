@@ -75,9 +75,7 @@ outputs:
         - requests
         - scipy
         - pytest-mock
-        # For some reason, av does not play well with ffmpeg 4.4
-        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
-        - ffmpeg 4.3
+        - ffmpeg
       source_files:
         - test
       imports:
