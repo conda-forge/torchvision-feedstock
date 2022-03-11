@@ -10,9 +10,6 @@ package:
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 99e6d3d304184895ff4f6152e2d2ec1cbec89b3e057d9c940ae0125546b04e91
-  patches:
-    # https://github.com/pytorch/vision/pull/5261
-    - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
   number: 0
