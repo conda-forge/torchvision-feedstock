@@ -15,7 +15,7 @@ source:
     - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win]
 
 requirements:
@@ -52,11 +52,13 @@ outputs:
         - numpy
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        - pytorch
+        # TODO: revert this; temporary hack to force
+        # solver to pick build with correct run-export
+        - pytorch =1.10.2=*_1
+        # - pytorch
         - pytorch =*={{ torch_proc_type }}*
       run:
         - python
-        - pytorch
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
