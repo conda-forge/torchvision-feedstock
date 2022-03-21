@@ -21,5 +21,8 @@ else
   export FORCE_CUDA=1
 fi
 
+# remove pyproject.toml
+rm $SRC_DIR/pyproject.toml
+
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
 ${PYTHON} -m pip install . -vv

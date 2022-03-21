@@ -1,5 +1,4 @@
-{% set tests_to_skip = "test_url_is_accessible" %}
-{% set version = "0.11.3" %}
+{% set version = "0.12.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -9,13 +8,13 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: b4c51d27589783e6e6941ecaa67b55f6f41633874ec37f80b64a0c92c3196e0c
+  sha256: 99e6d3d304184895ff4f6152e2d2ec1cbec89b3e057d9c940ae0125546b04e91
   patches:
-    # https://github.com/pytorch/vision/pull/5261
-    - patches/0001-avoid-hard-coded-gcc.patch
+    # backport pytorch/vision#5652
+    - patches/0001-More-robust-check-in-tests-for-16-bits-images.patch
 
 build:
-  number: 2
+  number: 0
   skip: true  # [win]
 
 requirements:
@@ -54,11 +53,13 @@ outputs:
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
         - pytorch
         - pytorch =*={{ torch_proc_type }}*
+        - requests
       run:
         - python
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
+        - requests
       run_constrained:
         # 2022/02/05 hmaarrfk
         # While conda packaging seems to allow us to specify
@@ -78,9 +79,7 @@ outputs:
         - requests
         - scipy
         - pytest-mock
-        # For some reason, av does not play well with ffmpeg 4.4
-        # https://github.com/conda-forge/ffmpeg-feedstock/pull/115
-        - ffmpeg 4.3
+        - ffmpeg
       source_files:
         - test
       imports:
