@@ -15,7 +15,7 @@ source:
     - patches/0001-avoid-hard-coded-gcc.patch
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win]
 
 requirements:
