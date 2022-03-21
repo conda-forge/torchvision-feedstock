@@ -56,7 +56,6 @@ outputs:
         - pytorch =*={{ torch_proc_type }}*
       run:
         - python
-        - pytorch
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
