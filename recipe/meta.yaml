@@ -14,7 +14,7 @@ source:
     - patches/0001-More-robust-check-in-tests-for-16-bits-images.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
 
 requirements:
