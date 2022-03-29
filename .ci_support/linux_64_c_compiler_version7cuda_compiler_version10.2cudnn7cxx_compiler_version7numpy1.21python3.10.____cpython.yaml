@@ -21,7 +21,7 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-cuda:10.2
 ffmpeg:
-- '4.3'
+- '4.4'
 jpeg:
 - '9'
 libpng:
