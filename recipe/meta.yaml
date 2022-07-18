@@ -1,4 +1,4 @@
-{% set version = "0.12.0" %}
+{% set version = "0.13.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -9,12 +9,9 @@ package:
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 99e6d3d304184895ff4f6152e2d2ec1cbec89b3e057d9c940ae0125546b04e91
-  patches:
-    # backport pytorch/vision#5652
-    - patches/0001-More-robust-check-in-tests-for-16-bits-images.patch
 
 build:
-  number: 2
+  number: 0
   skip: true  # [win]
 
 requirements:
