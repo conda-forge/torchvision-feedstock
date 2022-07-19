@@ -113,11 +113,7 @@ outputs:
         # 2022/03/29 hmaarrfk
         # It seems that this test can cause segmentation faults on the CIs. 
         {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
-        # 2021/10/29 hmaarrfk
-        # CIs do not have enough resources to run the full suite of model tests
-        - rm -f test/test_models.py  # [unix]
-        - del /f test\test_models.py  # [win]
-        - pytest --verbose -k "not ({{ tests_to_skip }})" test/
+        - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/
 
 about:
   home: http://pytorch.org/
