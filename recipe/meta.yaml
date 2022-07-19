@@ -44,7 +44,9 @@ outputs:
         # split off image/video into separate outputs?
         - jpeg
         - libpng
-        - ffmpeg
+        # Specify lgpl version of ffmpeg so that there are
+        # no quesitons about the license of the resulting binary
+        - ffmpeg {{ ffmpeg }}=*lgpl_*
         - numpy
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
@@ -76,7 +78,6 @@ outputs:
         - requests
         - scipy
         - pytest-mock
-        - ffmpeg
       source_files:
         - test
       imports:
