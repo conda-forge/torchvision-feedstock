@@ -14,8 +14,6 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '13'
-ffmpeg:
-- '4.4'
 jpeg:
 - '9'
 libpng:
