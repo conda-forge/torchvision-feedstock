@@ -135,7 +135,16 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_detection_model_trainable_backbone_layers" %}
         {% set tests_to_skip = tests_to_skip + " or test_raft" %}
         {% set tests_to_skip = tests_to_skip + " or test_build_fx_feature_extractor" %}
-        - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/
+        # - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/
+        {% set ffmpeg_problematic_tests = "test_read_partial_video" %}
+        # {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or test_incorrect_anchors" %}
+        # {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or TestVideoGPUDecoder" %}
+        # {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or test_generalizedrcnn_transform_repr" %}
+        # {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or TestModelsDetectionNegativeSamples" %}
+        {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or TestVideoReader" %}
+        # {% set ffmpeg_problematic_tests = ffmpeg_problematic_tests + " or TestModelsDetectionUtils" %}
+        - pytest --verbose -k "({{ ffmpeg_problematic_tests }})" --durations=50 test/
+        # - pytest --verbose -k "TestVideoReader::test_read_video_in_range_from_memor" test/
 
 about:
   home: http://pytorch.org/
