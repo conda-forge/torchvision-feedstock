@@ -3,7 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '12'
+- '13'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -13,9 +13,7 @@ cuda_compiler_version:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '12'
-ffmpeg:
-- '4.4'
+- '13'
 jpeg:
 - '9'
 libpng:
@@ -35,7 +33,7 @@ pin_run_as_build:
 python:
 - 3.8.* *_cpython
 pytorch:
-- '1.11'
+- '1.12'
 target_platform:
 - osx-64
 zip_keys:
