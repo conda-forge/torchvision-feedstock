@@ -1,5 +1,6 @@
 build_platform:
   osx_arm64: osx_64
+  linux_aarch64: linux_aarch64
 conda_forge_output_validation: true
 github:
   branch_name: main
@@ -9,3 +10,5 @@ os_version:
 test_on_native_only: true
 conda_build:
   pkg_format: '2'
+provider:
+  linux_aarch64: default
