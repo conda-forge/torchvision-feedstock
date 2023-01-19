@@ -118,7 +118,7 @@ outputs:
         # 2022/03/29 hmaarrfk
         # It seems that this test can cause segmentation faults on the CIs.
         {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
-        {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %} 
+        # {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %} 
         # 2022/07 hmaarrfk really large memory tests. Fail on CIs
         {% set tests_to_skip = tests_to_skip + " or test_memory_efficient_densenet" %}
         {% set tests_to_skip = tests_to_skip + " or test_resnet_dilation" %}
