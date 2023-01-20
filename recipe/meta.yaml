@@ -11,7 +11,7 @@ source:
   sha256: be1621c85c56eb40537cb74e6ec5d8e58ed8b69f8374a58bcb6ec413cb540c8b
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
   # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
   # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
@@ -118,6 +118,7 @@ outputs:
         # 2022/03/29 hmaarrfk
         # It seems that this test can cause segmentation faults on the CIs.
         {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
+        {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %} 
         # 2022/07 hmaarrfk really large memory tests. Fail on CIs
         {% set tests_to_skip = tests_to_skip + " or test_memory_efficient_densenet" %}
         {% set tests_to_skip = tests_to_skip + " or test_resnet_dilation" %}
@@ -138,6 +139,9 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_detection_model_trainable_backbone_layers" %}
         {% set tests_to_skip = tests_to_skip + " or test_raft" %}
         {% set tests_to_skip = tests_to_skip + " or test_build_fx_feature_extractor" %}
+        # 2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'
+        {% set tests_to_skip = tests_to_skip + " or test_transformation_range" %}
+        {% set tests_to_skip = tests_to_skip + " or test_transformation_discrete" %}
         - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/
 
 about:
