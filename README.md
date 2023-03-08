@@ -1,11 +1,11 @@
-About torchvision
-=================
+About torchvision-feedstock
+===========================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/torchvision-feedstock/blob/main/LICENSE.txt)
 
 Home: http://pytorch.org/
 
 Package license: BSD-3-Clause
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/torchvision-feedstock/blob/main/LICENSE.txt)
 
 Summary: Image and video datasets and models for torch deep learning
 
