@@ -1,4 +1,4 @@
-{% set version = "0.14.1" %}
+{% set version = "0.15.1" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 {% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
@@ -11,7 +11,7 @@ source:
   sha256: ced67e1cf1f97e168cdf271851a4d0b6d382ab7936e7bcbb39aaa87239c324b6
 
 build:
-  number: 1
+  number: 0
   skip: true  # [win]
   # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
   # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
