@@ -84,6 +84,7 @@ outputs:
         - pytest-mock
       source_files:
         - test
+        - references
       imports:
         - torchvision
         - torchvision.datasets
