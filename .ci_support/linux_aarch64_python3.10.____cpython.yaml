@@ -25,15 +25,15 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 numpy:
-- '1.20'
+- '1.21'
 pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.8.* *_cpython
+- 3.10.* *_cpython
 pytorch:
-- '1.13'
+- '2.0'
 target_platform:
 - linux-aarch64
 zip_keys:
