@@ -9,9 +9,11 @@ package:
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: 1efcb80e0a6e42c54f07ee16167839b4d302aeeecc12839cc47c74b06a2c20d4
+  patches:
+    - 0001-Monkeypatch-TORCH_LIB_PATH.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
   # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
   # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
@@ -146,7 +148,7 @@ outputs:
         # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
         {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}     
         - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
-        - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64]
+        - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
 about:
   home: http://pytorch.org/
