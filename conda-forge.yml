@@ -9,4 +9,5 @@ github:
   tooling_branch_name: main
 os_version:
   linux_64: cos7
-test_on_native_only: true
+# Emulated tests exceed the 6h CI threshold
+test: native
