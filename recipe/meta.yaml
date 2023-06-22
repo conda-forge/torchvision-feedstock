@@ -148,7 +148,7 @@ outputs:
         # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
         {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}     
         - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
-        - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64]
+        - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
 about:
   home: http://pytorch.org/
