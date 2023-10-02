@@ -15,19 +15,19 @@ cxx_compiler:
 cxx_compiler_version:
 - '15'
 libjpeg_turbo:
-- 2.1.5
+- '3'
 libpng:
 - '1.6'
 macos_machine:
 - arm64-apple-darwin20.0.0
 numpy:
-- '1.21'
+- '1.22'
 pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.10.* *_cpython
+- 3.9.* *_cpython
 pytorch:
 - '2.0'
 target_platform:
