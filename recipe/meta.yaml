@@ -13,11 +13,13 @@ source:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win]
   # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
   # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
   skip: true  # [cuda_compiler_version in ("10.2", "11.0", "11.1")]
+  # no CUDA-enabled pytorch on aarch yet
+  skip: true  # [cuda_compiler_version != "None" and aarch64]
 
 requirements:
   build:
@@ -97,6 +99,8 @@ outputs:
         # skip test_url_is_accessible instead of hitting 20+ servers per run, since
         # each server might be occasionally unresponsive and end up failing our CI
         {% set tests_to_skip = "test_url_is_accessible" %}
+        # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
+        {% set tests_to_skip = tests_to_skip + " or (test_transforms and test_adjust_saturation)" %}
         # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
         {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
         # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
