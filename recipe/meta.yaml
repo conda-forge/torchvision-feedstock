@@ -42,6 +42,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
+        - cuda-version                           # [cuda_compiler_version != "None"]
         - sysroot_linux-64 ==2.17                # [linux64]
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
@@ -68,6 +69,9 @@ outputs:
         - requests
       run:
         - python
+        # torchvision requires that CUDA major and minor versions match with pytorch
+        # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
+        - {{ pin_compatible('cuda-version', max_pin='x.x') }}  # [cuda_compiler_version != "None"]
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
