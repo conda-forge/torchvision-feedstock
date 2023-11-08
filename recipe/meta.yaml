@@ -20,6 +20,11 @@ build:
   skip: true  # [cuda_compiler_version in ("10.2", "11.0", "11.1")]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
+  # Upstream has specific compatability ranges for pytorch and python which are
+  # updated every 0.x release. https://github.com/pytorch/vision#installation
+  skip: true  # [py < 38]
+  skip: true  # [py > 311]
+  {% set compatible_pytorch = "2.0" %}
 
 requirements:
   build:
@@ -41,7 +46,7 @@ outputs:
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - numpy                                  # [build_platform != target_platform]
-        - pytorch                                # [build_platform != target_platform]
+        - pytorch {{ compatible_pytorch }}       # [build_platform != target_platform]
         - pytorch =*={{ torch_proc_type }}*      # [build_platform != target_platform]
       host:
         - python
@@ -58,7 +63,7 @@ outputs:
         - numpy
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        - pytorch
+        - pytorch {{ compatible_pytorch }}
         - pytorch =*={{ torch_proc_type }}*
         - requests
       run:
@@ -125,7 +130,7 @@ outputs:
         # 2022/03/29 hmaarrfk
         # It seems that this test can cause segmentation faults on the CIs.
         {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
-        {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %} 
+        {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %}
         # 2022/07 hmaarrfk really large memory tests. Fail on CIs
         {% set tests_to_skip = tests_to_skip + " or test_memory_efficient_densenet" %}
         {% set tests_to_skip = tests_to_skip + " or test_resnet_dilation" %}
@@ -150,7 +155,7 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_transformation_range" %}
         {% set tests_to_skip = tests_to_skip + " or test_transformation_discrete" %}
         # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
-        {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}     
+        {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}
         - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
         - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
