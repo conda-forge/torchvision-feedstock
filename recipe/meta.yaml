@@ -1,6 +1,11 @@
 {% set version = "0.15.2" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
-{% set torch_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
+# torchvision requires that CUDA major and minor versions match with pytorch
+# https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
+{% set torch_proc_type = "cuda" ~ cuda_compiler_version | replace('.', '') if cuda_compiler_version != "None" else "cpu" %}
+# Upstream has specific compatability ranges for pytorch and python which are
+# updated every 0.x release. https://github.com/pytorch/vision#installation
+{% set compatible_pytorch = "2.0" %}
 
 package:
   name: torchvision-split
@@ -24,7 +29,6 @@ build:
   # updated every 0.x release. https://github.com/pytorch/vision#installation
   skip: true  # [py < 38]
   skip: true  # [py > 311]
-  {% set compatible_pytorch = "2.0" %}
 
 requirements:
   build:
@@ -42,13 +46,11 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
-        - cuda-version                           # [cuda_compiler_version != "None"]
         - sysroot_linux-64 ==2.17                # [linux64]
         - python                                 # [build_platform != target_platform]
         - cross-python_{{ target_platform }}     # [build_platform != target_platform]
         - numpy                                  # [build_platform != target_platform]
-        - pytorch {{ compatible_pytorch }}       # [build_platform != target_platform]
-        - pytorch =*={{ torch_proc_type }}*      # [build_platform != target_platform]
+        - pytorch ={{ compatible_pytorch }}={{ torch_proc_type }}*  # [build_platform != target_platform]
       host:
         - python
         - pip
@@ -64,29 +66,15 @@ outputs:
         - numpy
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        - pytorch {{ compatible_pytorch }}
-        - pytorch =*={{ torch_proc_type }}*
+        - pytorch ={{ compatible_pytorch }}={{ torch_proc_type }}*
         - requests
       run:
         - python
-        # torchvision requires that CUDA major and minor versions match with pytorch
-        # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
-        - {{ pin_compatible('cuda-version', max_pin='x.x') }}  # [cuda_compiler_version != "None"]
+        - pytorch ={{ compatible_pytorch }}={{ torch_proc_type }}*
         - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
         - {{ pin_compatible('numpy') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
         - requests
-      run_constrained:
-        # 2022/02/05 hmaarrfk
-        # While conda packaging seems to allow us to specify
-        # constraints on the same package in different lines
-        # the resulting package doesn't have the ability to
-        # be specified in multiples lines
-        # This makes it tricky to use run_exports
-        # we add the GPU constraint in the run_constrained
-        # to allow us to have "two" constraints on the
-        # running package
-        - pytorch =*={{ torch_proc_type }}*
 
     test:
       requires:
