@@ -29,6 +29,10 @@ build:
   # updated every 0.x release. https://github.com/pytorch/vision#installation
   skip: true  # [py < 38]
   skip: true  # [py > 311]
+  rpaths:
+    - lib/
+  # PyTorch libs are in site-packages intead of with other shared objects
+    - {{ SP_DIR }}/torch/lib/
 
 requirements:
   build:
