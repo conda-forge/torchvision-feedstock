@@ -26,4 +26,4 @@ fi
 rm $SRC_DIR/pyproject.toml
 
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
-${PYTHON} -m pip install . -vv
+${PYTHON} -m pip install . -vv --no-deps --no-build-isolation
