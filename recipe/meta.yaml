@@ -1,4 +1,4 @@
-{% set version = "0.15.2" %}
+{% set version = "0.16.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
 # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -13,12 +13,12 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 1efcb80e0a6e42c54f07ee16167839b4d302aeeecc12839cc47c74b06a2c20d4
+  sha256: 79b30b082237e3ead21e74587cedf4a4d832f977cf7dfeccfb65f67988b12ceb
   patches:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
 
 build:
-  number: 5
+  number: 0
   skip: true  # [win]
   # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
   # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
@@ -27,8 +27,10 @@ build:
   skip: true  # [cuda_compiler_version != "None" and aarch64]
   # Upstream has specific compatability ranges for pytorch and python which are
   # updated every 0.x release. https://github.com/pytorch/vision#installation
-  skip: true  # [py < 38]
-  skip: true  # [py > 311]
+  # but.... they seem to say: "just follow what torch does"
+  # https://github.com/pytorch/pytorch/issues/110436
+  # skip: true  # [py < 38]
+  # skip: true  # [py > 311]
   rpaths:
     - lib/
   # PyTorch libs are in site-packages intead of with other shared objects
