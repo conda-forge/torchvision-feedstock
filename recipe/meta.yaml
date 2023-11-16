@@ -17,6 +17,7 @@ source:
   patches:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
     - use_shutils_instead_of_dir_util.patch
+    - rand_int_between_integers.patch
 
 build:
   number: 0
