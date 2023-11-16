@@ -16,6 +16,7 @@ source:
   sha256: 79b30b082237e3ead21e74587cedf4a4d832f977cf7dfeccfb65f67988b12ceb
   patches:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
+    - use_shutils_instead_of_dir_util.patch
 
 build:
   number: 0

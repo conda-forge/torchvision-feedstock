@@ -1,0 +1,22 @@
+diff --git a/test/test_datasets_download.py b/test/test_datasets_download.py
+index cf0211dbb..317497f27 100644
+--- a/test/test_datasets_download.py
++++ b/test/test_datasets_download.py
+@@ -6,7 +6,7 @@ import traceback
+ import unittest.mock
+ import warnings
+ from datetime import datetime
+-from distutils import dir_util
++import shutil
+ from os import path
+ from urllib.error import HTTPError, URLError
+ from urllib.parse import urlparse
+@@ -180,7 +180,7 @@ ROOT = tempfile.mkdtemp()
+ @pytest.fixture(scope="module", autouse=True)
+ def root():
+     yield ROOT
+-    dir_util.remove_tree(ROOT)
++    shutil.rmtree(ROOT)
+ 
+ 
+ def places365():
