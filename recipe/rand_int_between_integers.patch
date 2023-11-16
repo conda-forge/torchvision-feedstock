@@ -25,7 +25,7 @@ index 7581bf3322..44b6051abb 100644
      img = torch.ones(3, height, width, dtype=torch.uint8)
      oh1 = (height - oheight) // 2
 diff --git a/test/test_transforms_video.py b/test/test_transforms_video.py
-index 21594868f0..a04f3a2428 100644
+index 21594868f0..4ad57e6a98 100644
 --- a/test/test_transforms_video.py
 +++ b/test/test_transforms_video.py
 @@ -23,8 +23,8 @@ class TestVideoTransforms:
@@ -50,7 +50,7 @@ index 21594868f0..a04f3a2428 100644
          clip = torch.randint(0, 256, (numFrames, height, width, 3), dtype=torch.uint8)
          result = Compose(
              [
-@@ -59,11 +59,11 @@ class TestVideoTransforms:
+@@ -59,8 +59,8 @@ class TestVideoTransforms:
          numFrames = random.randint(4, 128)
          height = random.randint(10, 32) * 2
          width = random.randint(10, 32) * 2
@@ -60,8 +60,4 @@ index 21594868f0..a04f3a2428 100644
 +        owidth = random.randint(5, (width - 2) // 2) * 2
  
          clip = torch.ones((numFrames, height, width, 3), dtype=torch.uint8) * 255
--        oh1 = (height - oheight) // 2
-+        oh1 = (height - oheight) /// 2
-         ow1 = (width - owidth) // 2
-         clipNarrow = clip[:, oh1 : oh1 + oheight, ow1 : ow1 + owidth, :]
-         clipNarrow.fill_(0)
+         oh1 = (height - oheight) // 2
