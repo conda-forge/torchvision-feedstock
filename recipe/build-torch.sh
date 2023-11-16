@@ -1,3 +1,5 @@
+set -ex
+
 if [[ "$cuda_compiler_version" == "None" ]]; then
   export FORCE_CUDA=0
 else
@@ -23,7 +25,10 @@ else
 fi
 
 # remove pyproject.toml
-rm $SRC_DIR/pyproject.toml
+rm -f pyproject.toml
 
+# hmaarrfk I found that it was pretty buggy:
+# https://github.com/conda-forge/torchvision-feedstock/pull/60
+export TORCHVISION_USE_FFMPEG=0
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
 ${PYTHON} -m pip install . -vv --no-deps --no-build-isolation
