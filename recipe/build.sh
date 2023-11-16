@@ -1,3 +1,5 @@
+set -ex
+
 if [[ "$cuda_compiler_version" == "None" ]]; then
   export FORCE_CUDA=0
 else
