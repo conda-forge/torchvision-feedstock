@@ -29,10 +29,8 @@ build:
   skip: true  # [cuda_compiler_version != "None" and aarch64]
   # Upstream has specific compatability ranges for pytorch and python which are
   # updated every 0.x release. https://github.com/pytorch/vision#installation
-  # but.... they seem to say: "just follow what torch does"
-  # https://github.com/pytorch/pytorch/issues/110436
-  # skip: true  # [py < 38]
-  # skip: true  # [py > 311]
+  skip: true  # [py < 38]
+  skip: true  # [py > 311]
   rpaths:
     - lib/
   # PyTorch libs are in site-packages intead of with other shared objects
