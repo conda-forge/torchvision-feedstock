@@ -1,4 +1,4 @@
-{% set version = "0.16.0" %}
+{% set version = "0.16.1" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
 # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -13,7 +13,7 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
-  sha256: 79b30b082237e3ead21e74587cedf4a4d832f977cf7dfeccfb65f67988b12ceb
+  sha256: d31fe52e4540750c8d372b0f38f1bfa81d8261193f2c2c06577332831d203c50
   patches:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
     - use_shutils_instead_of_dir_util.patch
