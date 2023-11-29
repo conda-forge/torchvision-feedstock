@@ -18,7 +18,7 @@ source:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
