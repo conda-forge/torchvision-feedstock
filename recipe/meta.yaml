@@ -18,11 +18,8 @@ source:
     - 0001-Monkeypatch-TORCH_LIB_PATH.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
-  # as of pytorch 1.13, conda-forge only builds for CUDA 11.2+, see
-  # https://github.com/conda-forge/conda-forge-pinning-feedstock/issues/3491
-  skip: true  # [cuda_compiler_version in ("10.2", "11.0", "11.1")]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
   # Upstream has specific compatability ranges for pytorch and python which are
