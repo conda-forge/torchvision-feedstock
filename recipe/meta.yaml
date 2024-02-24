@@ -164,6 +164,9 @@ outputs:
         {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}
         # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
         {% set tests_to_skip = tests_to_skip + " or test_draw_boxes" %}
+        # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
+        # causing them to fail
+        {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
         - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
         - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
