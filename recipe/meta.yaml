@@ -21,8 +21,12 @@ source:
   url: https://github.com/pytorch/vision/archive/v{{ version }}.tar.gz
   sha256: d31fe52e4540750c8d372b0f38f1bfa81d8261193f2c2c06577332831d203c50
   patches:
-    - 0001-Monkeypatch-TORCH_LIB_PATH.patch
+    # - 0001-Monkeypatch-TORCH_LIB_PATH.patch
+    # https://github.com/pytorch/vision/pull/8280
     - 8280-remove_distutils.patch
+    # Test only patch below
+    # https://github.com/pytorch/vision/pull/8119
+    - 8119-use_integer_division_for_range_inputs.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
