@@ -94,6 +94,7 @@ test:
   source_files:
     - test
     - references
+    - pytest.ini
   imports:
     - torchvision
     - torchvision.datasets
