@@ -1,11 +1,7 @@
-BUILD:
-- aarch64-conda_cos7-linux-gnu
 c_compiler:
 - gcc
 c_compiler_version:
 - '12'
-cdt_arch:
-- aarch64
 cdt_name:
 - cos7
 channel_sources:
@@ -13,9 +9,11 @@ channel_sources:
 channel_targets:
 - conda-forge main
 cuda_compiler:
-- nvcc
+- None
 cuda_compiler_version:
 - None
+cudnn:
+- '8'
 cxx_compiler:
 - gxx
 cxx_compiler_version:
@@ -26,16 +24,18 @@ libjpeg_turbo:
 - '3'
 libpng:
 - '1.6'
+libtorch:
+- '2.1'
 numpy:
-- '1.22'
+- '1.26'
 pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.8.* *_cpython
+- 3.12.* *_cpython
 target_platform:
-- linux-aarch64
+- linux-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version

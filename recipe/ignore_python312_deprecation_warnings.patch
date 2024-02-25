@@ -1,0 +1,16 @@
+diff --git a/test/test_transforms_v2_refactored.py b/test/test_transforms_v2_refactored.py
+index e18beb35a4..142e3f2d43 100644
+--- a/test/test_transforms_v2_refactored.py
++++ b/test/test_transforms_v2_refactored.py
+@@ -416,7 +416,10 @@ def reference_affine_bounding_boxes_helper(bounding_boxes, *, affine_matrix, new
+ 
+ 
+ # turns all warnings into errors for this module
+-pytestmark = pytest.mark.filterwarnings("error")
++pytestmark = [
++    pytest.mark.filterwarnings("error"),
++    pytest.mark.filterwarnings("ignore::DeprecationWarning"),
++]
+ 
+ 
+ class TestResize:

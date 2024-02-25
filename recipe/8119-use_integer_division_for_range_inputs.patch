@@ -1,0 +1,74 @@
+From d922c581576eb5f19af7ac730d1bdbb68b8a591e Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Wed, 15 Nov 2023 23:06:08 -0500
+Subject: [PATCH] Help make test dependent on randint compatible with python
+ 3.12
+
+---
+ test/test_transforms.py       |  8 ++++----
+ test/test_transforms_video.py | 12 ++++++------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/test/test_transforms.py b/test/test_transforms.py
+index 4440942f7cf..e87a8cd28bc 100644
+--- a/test/test_transforms.py
++++ b/test/test_transforms.py
+@@ -1613,8 +1613,8 @@ def test_augmix(fill, severity, mixture_width, chain_depth, all_ops, grayscale):
+ def test_random_crop():
+     height = random.randint(10, 32) * 2
+     width = random.randint(10, 32) * 2
+-    oheight = random.randint(5, (height - 2) / 2) * 2
+-    owidth = random.randint(5, (width - 2) / 2) * 2
++    oheight = random.randint(5, (height - 2) // 2) * 2
++    owidth = random.randint(5, (width - 2) // 2) * 2
+     img = torch.ones(3, height, width, dtype=torch.uint8)
+     result = transforms.Compose(
+         [
+@@ -1663,8 +1663,8 @@ def test_random_crop():
+ def test_center_crop():
+     height = random.randint(10, 32) * 2
+     width = random.randint(10, 32) * 2
+-    oheight = random.randint(5, (height - 2) / 2) * 2
+-    owidth = random.randint(5, (width - 2) / 2) * 2
++    oheight = random.randint(5, (height - 2) // 2) * 2
++    owidth = random.randint(5, (width - 2) // 2) * 2
+ 
+     img = torch.ones(3, height, width, dtype=torch.uint8)
+     oh1 = (height - oheight) // 2
+diff --git a/test/test_transforms_video.py b/test/test_transforms_video.py
+index 21594868f09..4ad57e6a98e 100644
+--- a/test/test_transforms_video.py
++++ b/test/test_transforms_video.py
+@@ -23,8 +23,8 @@ def test_random_crop_video(self):
+         numFrames = random.randint(4, 128)
+         height = random.randint(10, 32) * 2
+         width = random.randint(10, 32) * 2
+-        oheight = random.randint(5, (height - 2) / 2) * 2
+-        owidth = random.randint(5, (width - 2) / 2) * 2
++        oheight = random.randint(5, (height - 2) // 2) * 2
++        owidth = random.randint(5, (width - 2) // 2) * 2
+         clip = torch.randint(0, 256, (numFrames, height, width, 3), dtype=torch.uint8)
+         result = Compose(
+             [
+@@ -41,8 +41,8 @@ def test_random_resized_crop_video(self):
+         numFrames = random.randint(4, 128)
+         height = random.randint(10, 32) * 2
+         width = random.randint(10, 32) * 2
+-        oheight = random.randint(5, (height - 2) / 2) * 2
+-        owidth = random.randint(5, (width - 2) / 2) * 2
++        oheight = random.randint(5, (height - 2) // 2) * 2
++        owidth = random.randint(5, (width - 2) // 2) * 2
+         clip = torch.randint(0, 256, (numFrames, height, width, 3), dtype=torch.uint8)
+         result = Compose(
+             [
+@@ -59,8 +59,8 @@ def test_center_crop_video(self):
+         numFrames = random.randint(4, 128)
+         height = random.randint(10, 32) * 2
+         width = random.randint(10, 32) * 2
+-        oheight = random.randint(5, (height - 2) / 2) * 2
+-        owidth = random.randint(5, (width - 2) / 2) * 2
++        oheight = random.randint(5, (height - 2) // 2) * 2
++        owidth = random.randint(5, (width - 2) // 2) * 2
+ 
+         clip = torch.ones((numFrames, height, width, 3), dtype=torch.uint8) * 255
+         oh1 = (height - oheight) // 2
