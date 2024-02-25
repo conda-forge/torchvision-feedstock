@@ -28,6 +28,7 @@ source:
     # Test only patch below
     # https://github.com/pytorch/vision/pull/8119
     - 8119-use_integer_division_for_range_inputs.patch
+    - ignore_python312_deprecation_warnings.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
