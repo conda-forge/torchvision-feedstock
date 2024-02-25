@@ -20,6 +20,8 @@ libjpeg_turbo:
 - '3'
 libpng:
 - '1.6'
+libtorch:
+- '2.1'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 numpy:
