@@ -1,0 +1,25 @@
+From 34f969e41510f5a9a7f65671f03c07a0028193b2 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sun, 25 Feb 2024 12:45:23 -0500
+Subject: [PATCH 4/4] Ignore python 3.12 deprecation warnings
+
+---
+ test/test_transforms_v2_refactored.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/test/test_transforms_v2_refactored.py b/test/test_transforms_v2_refactored.py
+index e18beb3..142e3f2 100644
+--- a/test/test_transforms_v2_refactored.py
++++ b/test/test_transforms_v2_refactored.py
+@@ -416,7 +416,10 @@ def reference_affine_bounding_boxes_helper(bounding_boxes, *, affine_matrix, new
+ 
+ 
+ # turns all warnings into errors for this module
+-pytestmark = pytest.mark.filterwarnings("error")
++pytestmark = [
++    pytest.mark.filterwarnings("error"),
++    pytest.mark.filterwarnings("ignore::DeprecationWarning"),
++]
+ 
+ 
+ class TestResize:

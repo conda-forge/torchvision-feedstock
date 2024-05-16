@@ -22,13 +22,13 @@ source:
   sha256: d31fe52e4540750c8d372b0f38f1bfa81d8261193f2c2c06577332831d203c50
   patches:
     # seems to be necessary for aarch???
-    - 0001-Monkeypatch-TORCH_LIB_PATH.patch
+    - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
     # https://github.com/pytorch/vision/pull/8280
-    - 8280-remove_distutils.patch
+    - patches/0002-Remove-deprecated-distutils-usage.patch
     # Test only patch below
     # https://github.com/pytorch/vision/pull/8119
-    - 8119-use_integer_division_for_range_inputs.patch
-    - ignore_python312_deprecation_warnings.patch
+    - patches/0003-Help-make-test-dependent-on-randint-compatible-with-.patch
+    - patches/0004-Ignore-python-3.12-deprecation-warnings.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
