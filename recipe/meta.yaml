@@ -5,7 +5,7 @@
 {% set torch_proc_type = "cuda" ~ cuda_compiler_version | replace('.', '') if cuda_compiler_version != "None" else "cpu" %}
 # Upstream has specific compatability ranges for pytorch and python which are
 # updated every 0.x release. https://github.com/pytorch/vision#installation
-{% set compatible_pytorch = "2.1" %}
+{% set compatible_pytorch = "2.3" %}
 
 {% if cuda_compiler_version in (None, "None", True, False) %}
 {% set cuda_major = 0 %}
