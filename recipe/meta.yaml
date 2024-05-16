@@ -37,9 +37,6 @@ build:
   skip: true  # [win]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
-  # Upstream has specific compatability ranges for pytorch and python which are
-  # updated every 0.x release. https://github.com/pytorch/vision#installation
-  skip: true  # [py < 38]
 
 requirements:
   build:
