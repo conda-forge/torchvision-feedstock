@@ -82,6 +82,7 @@ test:
   requires:
     - pytest
     - av
+    - expecttest
     - scipy
     - pytest-mock
   source_files:
