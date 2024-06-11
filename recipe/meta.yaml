@@ -23,6 +23,8 @@ source:
   patches:
     # seems to be necessary for aarch???
     - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
+    # backport https://github.com/pytorch/vision/pull/8463 for numpy 2.0 compat
+    - patches/0002-Make-adjust_hue-work-with-numpy-2.0-8463.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
