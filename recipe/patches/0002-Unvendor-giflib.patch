@@ -1,0 +1,41 @@
+From 7b358f6e7b1d6540a7ff7f30d339b33dcdbac542 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 24 Aug 2024 18:37:36 -0400
+Subject: [PATCH 2/3] Unvendor giflib
+
+---
+ setup.py                                     | 3 ++-
+ torchvision/csrc/io/image/cpu/decode_gif.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index c0c1050f78..d2b263a4b1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -331,9 +331,10 @@ def get_extensions():
+     image_src = (
+         glob.glob(os.path.join(image_path, "*.cpp"))
+         + glob.glob(os.path.join(image_path, "cpu", "*.cpp"))
+-        + glob.glob(os.path.join(image_path, "cpu", "giflib", "*.c"))
+     )
+ 
++    image_library += ['gif']
++
+     if is_rocm_pytorch:
+         image_src += glob.glob(os.path.join(image_path, "hip", "*.cpp"))
+         # we need to exclude this in favor of the hipified source
+diff --git a/torchvision/csrc/io/image/cpu/decode_gif.cpp b/torchvision/csrc/io/image/cpu/decode_gif.cpp
+index 183d42e86a..b806f3359c 100644
+--- a/torchvision/csrc/io/image/cpu/decode_gif.cpp
++++ b/torchvision/csrc/io/image/cpu/decode_gif.cpp
+@@ -1,6 +1,6 @@
+ #include "decode_gif.h"
+ #include <cstring>
+-#include "giflib/gif_lib.h"
++#include <gif_lib.h>
+ 
+ namespace vision {
+ namespace image {
+-- 
+2.46.0
+

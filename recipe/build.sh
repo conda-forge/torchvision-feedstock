@@ -24,6 +24,9 @@ fi
 # remove pyproject.toml
 rm -f pyproject.toml
 
+# https://github.com/pytorch/vision/pull/8406/files#r1730151047
+rm -rf torchvision/csrc/io/image/cpu/giflib
+
 # hmaarrfk I found that it was pretty buggy:
 # https://github.com/conda-forge/torchvision-feedstock/pull/60
 export TORCHVISION_USE_FFMPEG=0

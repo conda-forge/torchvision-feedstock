@@ -1,0 +1,33 @@
+From 39085463041f81c366e9c7ecbc592bf3cbf26fcb Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 24 Aug 2024 18:38:27 -0400
+Subject: [PATCH 3/3] Support nvjpeg at conda-forge
+
+---
+ setup.py | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index d2b263a4b1..90b4c6b23d 100644
+--- a/setup.py
++++ b/setup.py
+@@ -311,13 +311,9 @@ def get_extensions():
+         print("Building torchvision without JPEG image support")
+     image_macros += [("JPEG_FOUND", str(int(use_jpeg)))]
+ 
+-    # Locating nvjpeg
+-    # Should be included in CUDA_HOME for CUDA >= 10.1, which is the minimum version we have in the CI
+-    nvjpeg_found = (
+-        extension is CUDAExtension
+-        and CUDA_HOME is not None
+-        and os.path.exists(os.path.join(CUDA_HOME, "include", "nvjpeg.h"))
+-    )
++    # conda-forge supports cross compilation of nvjpeg whic isn't
++    # Really supported upstream
++    nvjpeg_found = torch.cuda.is_available() or force_cuda
+ 
+     use_nvjpeg = use_nvjpeg and nvjpeg_found
+     if use_nvjpeg:
+-- 
+2.46.0
+
