@@ -9,7 +9,7 @@ c_stdlib_version:
 cdt_name:
 - cos7
 channel_sources:
-- conda-forge/label/numpy_rc,conda-forge
+- conda-forge
 channel_targets:
 - conda-forge main
 cuda_compiler:
@@ -24,12 +24,12 @@ cxx_compiler_version:
 - '11'
 docker_image:
 - quay.io/condaforge/linux-anvil-cuda:11.8
+giflib:
+- '5.2'
 libjpeg_turbo:
 - '3'
 libpng:
 - '1.6'
-libtorch:
-- '2.3'
 numpy:
 - '2.0'
 pin_run_as_build:
