@@ -1,4 +1,4 @@
-From 7b358f6e7b1d6540a7ff7f30d339b33dcdbac542 Mon Sep 17 00:00:00 2001
+From 358e56f66880c9d7d7acb9af20dcb4ad1059d722 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:37:36 -0400
 Subject: [PATCH 2/3] Unvendor giflib
@@ -9,7 +9,7 @@ Subject: [PATCH 2/3] Unvendor giflib
  2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index c0c1050f78..d2b263a4b1 100644
+index c0c1050f78..89ba2f1704 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -331,9 +331,10 @@ def get_extensions():
@@ -19,7 +19,7 @@ index c0c1050f78..d2b263a4b1 100644
 -        + glob.glob(os.path.join(image_path, "cpu", "giflib", "*.c"))
      )
  
-+    image_library += ['gif']
++    image_link_flags.append("gif")
 +
      if is_rocm_pytorch:
          image_src += glob.glob(os.path.join(image_path, "hip", "*.cpp"))

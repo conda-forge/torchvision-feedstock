@@ -1,4 +1,4 @@
-From 39085463041f81c366e9c7ecbc592bf3cbf26fcb Mon Sep 17 00:00:00 2001
+From b8d4e24d0f6e04028d16ecd8aedc17e47aa18adf Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:38:27 -0400
 Subject: [PATCH 3/3] Support nvjpeg at conda-forge
@@ -8,7 +8,7 @@ Subject: [PATCH 3/3] Support nvjpeg at conda-forge
  1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index d2b263a4b1..90b4c6b23d 100644
+index 89ba2f1704..bcf05d4367 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -311,13 +311,9 @@ def get_extensions():
