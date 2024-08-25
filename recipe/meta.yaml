@@ -1,11 +1,12 @@
-{% set version = "0.18.1" %}
+{% set tests_to_skip = "test_url_is_accessible" %}
+{% set version = "0.19.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
 # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
 {% set torch_proc_type = "cuda" ~ cuda_compiler_version | replace('.', '') if cuda_compiler_version != "None" else "cpu" %}
 # Upstream has specific compatability ranges for pytorch and python which are
 # updated every 0.x release. https://github.com/pytorch/vision#installation
-{% set compatible_pytorch = "2.3" %}
+{% set compatible_pytorch = "2.4" %}
 
 {% if cuda_compiler_version in (None, "None", True, False) %}
 {% set cuda_major = 0 %}
@@ -19,17 +20,26 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 347d472a9ceecc44e0bee1eda140d63cfaffc74a54ec07d4b98da7698ce75516
+  sha256: 4c499d0a412b5a21d55ac3c0a37e80ecd7e1f002f2a7b6b3b38a2de2544acbb6
   patches:
     # seems to be necessary for aarch???
     - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
-    # backport https://github.com/pytorch/vision/pull/8463 for numpy 2.0 compat
-    - patches/0002-Make-adjust_hue-work-with-numpy-2.0-8463.patch
+    # Our newer conda-forge clang compilers complain about this for OSX
+    # https://github.com/pytorch/vision/pull/8406/files#r1730151047
+    - patches/0002-Unvendor-giflib.patch
+    - patches/0003-Support-nvjpeg-at-conda-forge.patch
+
+    # 2024/08 hmaarrfk
+    # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
+    - patches/0004-Skip-OSS-CI-tests-as-well-in-conda-forge-azure.patch
+
+    # https://github.com/pytorch/vision/issues/8609
+    - patches/no_strict_transforms_warning.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
-  number: 1
+  number: 0
   skip: true  # [win]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
@@ -44,13 +54,15 @@ requirements:
     - libcublas-dev                          # [build_platform != target_platform]
     - libcusolver-dev                        # [build_platform != target_platform]
     - libcusparse-dev                        # [build_platform != target_platform]
+    - libnvjpeg-dev                          # [build_platform != target_platform]
     {% endif %}
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    # - numpy                                  # [build_platform != target_platform]
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*  # [build_platform != target_platform]
   host:
     - python
+    # - numpy
     - pip
     - setuptools
     - cudnn                                  # [cuda_compiler_version != "None"]
@@ -58,18 +70,19 @@ requirements:
     - libcublas-dev
     - libcusolver-dev
     - libcusparse-dev
+    - libnvjpeg-dev
     {% endif %}
-    # split off image/video into separate outputs?
     - libjpeg-turbo
     - libpng
+    # https://github.com/pytorch/vision/pull/8406/files#r1730151047
+    - giflib
     # Specify lgpl version of ffmpeg so that there are
     # no quesitons about the license of the resulting binary
     # hmaarrfk: 2022/07, I think that torchvision just has bugs with ffmpeg
     # - ffmpeg {{ ffmpeg }}=lgpl_*
-    - numpy
     # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
     - pillow >=5.3.0,!=8.3.0,!=8.3.1
-    - libtorch
+    - libtorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*
     - requests
   run:
@@ -77,11 +90,17 @@ requirements:
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*
     - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
     - pillow >=5.3.0,!=8.3.0,!=8.3.1
-    - requests
+    # They don't really document it, but it seems that they want a minimum version
+    # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
+    - numpy >=1.23.5
+    # While their conda package depends on requests, it seems it is only used for some test
+    # scripts and not the runtime
+    # - requests
 
 test:
   requires:
     - pytest
+    - requests
     - av
     - expecttest
     - scipy
@@ -167,7 +186,6 @@ about:
   license_file: LICENSE
   summary: Image and video datasets and models for torch deep learning
   dev_url: https://github.com/pytorch/vision
-  doc_url: http://pytorch.org/docs/master/torchvision
 
 extra:
   recipe-maintainers:
