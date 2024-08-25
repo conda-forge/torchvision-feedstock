@@ -28,6 +28,11 @@ source:
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
     - patches/0002-Unvendor-giflib.patch
     - patches/0003-Support-nvjpeg-at-conda-forge.patch
+
+    # 2024/08 hmaarrfk
+    # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
+    - patches/0004-Skip-OSS-CI-tests-as-well-in-conda-forge-azure.patch
+
     # https://github.com/pytorch/vision/issues/8609
     - patches/no_strict_transforms_warning.patch
 
@@ -171,12 +176,6 @@ test:
     # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
     # causing them to fail
     {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
-    # 2024/08 hmaarrfk
-    # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
-    # The square braket syntax doesn't work, so lets skip it a different way....
-    # {% set tests_to-skip = tests_to_skip + " or test_decode_gif[True-earth]" %}
-    # {% set tests_to-skip = tests_to_skip + " or test_decode_gif[False-earth]" %}
-    - sed -i.bak 's/if IN_OSS_CI/if true/g' test/conftest.py
     - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
     - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 

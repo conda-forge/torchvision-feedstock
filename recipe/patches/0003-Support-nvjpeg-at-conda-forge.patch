@@ -1,7 +1,7 @@
 From b8d4e24d0f6e04028d16ecd8aedc17e47aa18adf Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:38:27 -0400
-Subject: [PATCH 3/3] Support nvjpeg at conda-forge
+Subject: [PATCH 3/4] Support nvjpeg at conda-forge
 
 ---
  setup.py | 10 +++-------
