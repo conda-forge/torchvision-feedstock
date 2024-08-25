@@ -53,7 +53,6 @@ requirements:
     {% endif %}
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*  # [build_platform != target_platform]
   host:
     - python
@@ -74,7 +73,6 @@ requirements:
     # no quesitons about the license of the resulting binary
     # hmaarrfk: 2022/07, I think that torchvision just has bugs with ffmpeg
     # - ffmpeg {{ ffmpeg }}=lgpl_*
-    - numpy
     # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
     - pillow >=5.3.0,!=8.3.0,!=8.3.1
     - libtorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*
@@ -85,7 +83,12 @@ requirements:
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*
     - {{ pin_compatible('cudnn') }}          # [cuda_compiler_version != "None"]
     - pillow >=5.3.0,!=8.3.0,!=8.3.1
-    - requests
+    # They don't really document it, but it seems that they want a minimum version
+    # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
+    - numpy >=1.23.5
+    # While their conda package depends on requests, it seems it is only used for some test
+    # scripts and not the runtime
+    # - requests
 
 test:
   requires:
