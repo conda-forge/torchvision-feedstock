@@ -95,6 +95,7 @@ requirements:
 test:
   requires:
     - pytest
+    - requests
     - av
     - expecttest
     - scipy
