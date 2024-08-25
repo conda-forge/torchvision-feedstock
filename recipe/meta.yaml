@@ -171,6 +171,9 @@ test:
     # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
     # causing them to fail
     {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
+    # 2024/08 hmaarrfk
+    # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
+    {% set tests_to-skip = tests_to_skip + " or 'test_decode_gif[True-earth]'" %}
     - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
     - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
