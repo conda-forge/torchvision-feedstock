@@ -53,11 +53,11 @@ requirements:
     {% endif %}
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    # - numpy                                  # [build_platform != target_platform]
     - pytorch ={{ compatible_pytorch }}.*={{ torch_proc_type }}*  # [build_platform != target_platform]
   host:
     - python
-    - numpy
+    # - numpy
     - pip
     - setuptools
     - cudnn                                  # [cuda_compiler_version != "None"]
