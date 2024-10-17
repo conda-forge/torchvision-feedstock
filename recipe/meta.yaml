@@ -1,5 +1,5 @@
 {% set tests_to_skip = "test_url_is_accessible" %}
-{% set version = "0.19.1" %}
+{% set version = "0.20.0" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
 # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -20,7 +20,7 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 083e75c467285595ec3eb3c7aa8493c19e53d7eb42f13046fb56a07c8897e5a8
+  sha256: b59d9896c5c957c6db0018754bbd17d079c5102b82b9be0b438553b40a7b6029
   patches:
     # seems to be necessary for aarch???
     - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
@@ -39,7 +39,7 @@ source:
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
-  number: 1
+  number: 0
   skip: true  # [win]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
