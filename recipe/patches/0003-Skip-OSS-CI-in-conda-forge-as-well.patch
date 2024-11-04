@@ -15,8 +15,8 @@ index 99c7931587..7d8f0eaf98 100644
  
  
  IN_OSS_CI = any(os.getenv(var) == "true" for var in ["CIRCLECI", "GITHUB_ACTIONS"])
-++# conda-forge defines the CI variable
-++IN_OSS_CI = IN_OSS_CI or (os.getenv('CI') == 'azure')
++# conda-forge defines the CI variable
++IN_OSS_CI = IN_OSS_CI or (os.getenv('CI') == 'azure')
  IN_RE_WORKER = os.environ.get("INSIDE_RE_WORKER") is not None
  IN_FBCODE = os.environ.get("IN_FBCODE_TORCHVISION") == "1"
  CUDA_NOT_AVAILABLE_MSG = "CUDA device not available"
