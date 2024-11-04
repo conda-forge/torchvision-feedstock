@@ -7,7 +7,7 @@ ace:
 c_compiler:
 - clang
 c_compiler_version:
-- '17'
+- '18'
 c_stdlib:
 - macosx_deployment_target
 c_stdlib_version:
@@ -23,7 +23,7 @@ cuda_compiler_version:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '17'
+- '18'
 giflib:
 - '5.2'
 libjpeg_turbo:
