@@ -17,7 +17,7 @@ index 5bc87a50f5..27c3dd8ae3 100644
  
      image_dir = CSRS_DIR / "io/image"
 -    sources = list(image_dir.glob("*.cpp")) + list(image_dir.glob("cpu/*.cpp")) + list(image_dir.glob("cpu/giflib/*.c"))
-+    sources = list(image_dir.glob("*.cpp")) + list(image_dir.glob("cpu/*.cpp")))
++    sources = list(image_dir.glob("*.cpp")) + list(image_dir.glob("cpu/*.cpp"))
 +
 +    image_link_flags.append("gif")
  
