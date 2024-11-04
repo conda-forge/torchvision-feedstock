@@ -22,19 +22,15 @@ source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 7e08c7f56e2c89859310e53d898f72bccc4987cd83e08cfd6303513da15a9e71
   patches:
-    # seems to be necessary for aarch???
-    - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
-    - patches/0002-Unvendor-giflib.patch
-    - patches/0003-Support-nvjpeg-at-conda-forge.patch
+    - patches/0001-Use-system-giflib.patch
+
+    - patches/0002-Force-nvjpeg-and-force-failure.patch
 
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
-    - patches/0004-Skip-OSS-CI-tests-as-well-in-conda-forge-azure.patch
-
-    # https://github.com/pytorch/vision/issues/8609
-    - patches/no_strict_transforms_warning.patch
+    - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
