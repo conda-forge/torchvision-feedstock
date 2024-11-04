@@ -1,4 +1,4 @@
-From c4c2c5ab09454cee2f82a82b8e19667dc9f28a08 Mon Sep 17 00:00:00 2001
+From 3cb23858de120e80ea3c2e05a64c519dbaa415c0 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 3 Nov 2024 22:01:57 -0500
 Subject: [PATCH 1/3] Use system giflib
@@ -9,7 +9,7 @@ Subject: [PATCH 1/3] Use system giflib
  2 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index 5bc87a50f5..27c3dd8ae3 100644
+index 5bc87a50f5..a30d6536ad 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -281,7 +281,9 @@ def make_image_extension():
@@ -19,7 +19,7 @@ index 5bc87a50f5..27c3dd8ae3 100644
 -    sources = list(image_dir.glob("*.cpp")) + list(image_dir.glob("cpu/*.cpp")) + list(image_dir.glob("cpu/giflib/*.c"))
 +    sources = list(image_dir.glob("*.cpp")) + list(image_dir.glob("cpu/*.cpp"))
 +
-+    image_link_flags.append("gif")
++    libraries.append("gif")
  
      if IS_ROCM:
          sources += list(image_dir.glob("hip/*.cpp"))

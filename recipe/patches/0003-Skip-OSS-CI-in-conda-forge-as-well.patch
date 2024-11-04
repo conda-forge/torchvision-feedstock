@@ -1,4 +1,4 @@
-From ad333a6aef46af658de3630994a32ebc8830ea1e Mon Sep 17 00:00:00 2001
+From 2ca26f68b6000ab36ccdc64e986b64b3976f209c Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 3 Nov 2024 22:04:35 -0500
 Subject: [PATCH 3/3] Skip OSS CI in conda-forge as well
