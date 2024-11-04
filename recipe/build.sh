@@ -2,9 +2,7 @@ set -ex
 
 if [[ "$cuda_compiler_version" == "None" ]]; then
   export FORCE_CUDA=0
-  export TORCHVISION_USE_NVJPEG=0
 else
-  export TORCHVISION_USE_NVJPEG=1
   if [[ ${cuda_compiler_version} == 11.2* ]]; then
       export TORCH_CUDA_ARCH_LIST="3.5;5.0;6.0;6.1;7.0;7.5;8.0;8.6"
   elif [[ ${cuda_compiler_version} == 11.8 ]]; then
@@ -32,5 +30,6 @@ rm -rf torchvision/csrc/io/image/cpu/giflib
 # hmaarrfk I found that it was pretty buggy:
 # https://github.com/conda-forge/torchvision-feedstock/pull/60
 export TORCHVISION_USE_FFMPEG=0
+export TORCHVISION_USE_NVJPEG=${FORCE_CUDA}
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
 ${PYTHON} -m pip install . -vv --no-deps --no-build-isolation
