@@ -12,6 +12,10 @@ else
       export TORCH_CUDA_ARCH_LIST="5.0;6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0"
       # $CUDA_HOME not set in CUDA 12.0. Using $PREFIX
       export CUDA_TOOLKIT_ROOT_DIR="${PREFIX}"
+  elif [[ ${cuda_compiler_version} == 12.6 ]]; then
+      export TORCH_CUDA_ARCH_LIST="5.0;6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0"
+      # $CUDA_HOME not set in CUDA 12.0. Using $PREFIX
+      export CUDA_TOOLKIT_ROOT_DIR="${PREFIX}"
   else
       echo "unsupported cuda version. edit build.sh"
       exit 1
@@ -30,5 +34,6 @@ rm -rf torchvision/csrc/io/image/cpu/giflib
 # hmaarrfk I found that it was pretty buggy:
 # https://github.com/conda-forge/torchvision-feedstock/pull/60
 export TORCHVISION_USE_FFMPEG=0
+export TORCHVISION_USE_NVJPEG=${FORCE_CUDA}
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
 ${PYTHON} -m pip install . -vv --no-deps --no-build-isolation

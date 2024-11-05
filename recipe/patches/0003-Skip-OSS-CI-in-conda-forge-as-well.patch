@@ -1,0 +1,25 @@
+From 2ca26f68b6000ab36ccdc64e986b64b3976f209c Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sun, 3 Nov 2024 22:04:35 -0500
+Subject: [PATCH 3/3] Skip OSS CI in conda-forge as well
+
+---
+ test/common_utils.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/test/common_utils.py b/test/common_utils.py
+index 99c7931587..7d8f0eaf98 100644
+--- a/test/common_utils.py
++++ b/test/common_utils.py
+@@ -25,6 +25,8 @@ from torchvision.transforms.v2.functional import to_image, to_pil_image
+ 
+ 
+ IN_OSS_CI = any(os.getenv(var) == "true" for var in ["CIRCLECI", "GITHUB_ACTIONS"])
++# conda-forge defines the CI variable
++IN_OSS_CI = IN_OSS_CI or (os.getenv('CI') == 'azure')
+ IN_RE_WORKER = os.environ.get("INSIDE_RE_WORKER") is not None
+ IN_FBCODE = os.environ.get("IN_FBCODE_TORCHVISION") == "1"
+ CUDA_NOT_AVAILABLE_MSG = "CUDA device not available"
+-- 
+2.47.0
+

@@ -1,0 +1,41 @@
+From b9cbc7dc9d20f8813ba3644f65a15a4ceb9530e0 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sun, 3 Nov 2024 22:04:00 -0500
+Subject: [PATCH 2/3] Force nvjpeg and force failure
+
+---
+ setup.py | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index a30d6536ad..ebf70f5ac6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -369,17 +369,14 @@ def make_image_extension():
+             warnings.warn("Building torchvision without AVIF support")
+ 
+     if USE_NVJPEG and (torch.cuda.is_available() or FORCE_CUDA):
+-        nvjpeg_found = CUDA_HOME is not None and (Path(CUDA_HOME) / "include/nvjpeg.h").exists()
+-
+-        if nvjpeg_found:
+-            print("Building torchvision with NVJPEG image support")
+-            libraries.append("nvjpeg")
+-            define_macros += [("NVJPEG_FOUND", 1)]
+-            Extension = CUDAExtension
+-        else:
+-            warnings.warn("Building torchvision without NVJPEG support")
++        # conda-forge supports cross compilation of nvjpeg whic isn't
++        # Really supported upstream
++        print("Building torchvision with NVJPEG image support")
++        libraries.append("nvjpeg")
++        define_macros += [("NVJPEG_FOUND", 1)]
++        Extension = CUDAExtension
+     elif USE_NVJPEG:
+-        warnings.warn("Building torchvision without NVJPEG support")
++        raise RuntimeError("NVJPEG Requested but building without it")
+ 
+     return Extension(
+         name="torchvision.image",
+-- 
+2.47.0
+

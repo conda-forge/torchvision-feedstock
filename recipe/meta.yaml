@@ -1,12 +1,12 @@
 {% set tests_to_skip = "test_url_is_accessible" %}
-{% set version = "0.19.1" %}
+{% set version = "0.20.1" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
 # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
 {% set torch_proc_type = "cuda" ~ cuda_compiler_version | replace('.', '') if cuda_compiler_version != "None" else "cpu" %}
 # Upstream has specific compatability ranges for pytorch and python which are
 # updated every 0.x release. https://github.com/pytorch/vision#installation
-{% set compatible_pytorch = "2.4" %}
+{% set compatible_pytorch = "2.5" %}
 
 {% if cuda_compiler_version in (None, "None", True, False) %}
 {% set cuda_major = 0 %}
@@ -20,29 +20,25 @@ package:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 083e75c467285595ec3eb3c7aa8493c19e53d7eb42f13046fb56a07c8897e5a8
+  sha256: 7e08c7f56e2c89859310e53d898f72bccc4987cd83e08cfd6303513da15a9e71
   patches:
-    # seems to be necessary for aarch???
-    - patches/0001-Monkeypatch-TORCH_LIB_PATH.patch
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
-    - patches/0002-Unvendor-giflib.patch
-    - patches/0003-Support-nvjpeg-at-conda-forge.patch
+    - patches/0001-Use-system-giflib.patch
+
+    - patches/0002-Force-nvjpeg-and-force-failure.patch
 
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
-    - patches/0004-Skip-OSS-CI-tests-as-well-in-conda-forge-azure.patch
-
-    # https://github.com/pytorch/vision/issues/8609
-    - patches/no_strict_transforms_warning.patch
+    - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
-  number: 1
+  number: 0
   skip: true  # [win]
-  # no CUDA-enabled pytorch on aarch yet
-  skip: true  # [cuda_compiler_version != "None" and aarch64]
+  # aarch doesn't have a build for cuda 11.8 yet
+  skip: true  # [ aarch64 and cuda_compiler_version == "11.8"]
 
 requirements:
   build:
