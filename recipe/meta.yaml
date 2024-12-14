@@ -32,10 +32,17 @@ source:
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
 
+    # Can likely remove after 0.20.1
+    # https://github.com/pytorch/vision/pull/8776
+    - patches/8776_compatibility_with_pyav_14.patch
+
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
-  number: 0
+  number: 1
+  script_env:
+    # required by the setup.py script to find the right version in 0.20.1
+    - BUILD_VERSION={{ version }}
   skip: true  # [win]
   # aarch doesn't have a build for cuda 11.8 yet
   skip: true  # [ aarch64 and cuda_compiler_version == "11.8"]
@@ -70,6 +77,7 @@ requirements:
     {% endif %}
     - libjpeg-turbo
     - libpng
+    - libwebp
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
     - giflib
     # Specify lgpl version of ffmpeg so that there are
@@ -101,6 +109,7 @@ test:
     - expecttest
     - scipy
     - pytest-mock
+    - pip
   source_files:
     - test
     - references
@@ -172,6 +181,11 @@ test:
     # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
     # causing them to fail
     {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
+    # use pip list to manually check that the version is correctly reported
+    # Otherwise downstream package's pip check may fail
+    - pip list
+    - pip list | grep torchvision | grep {{ version }}         # [unix]
+    - pip check
     - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
     - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
