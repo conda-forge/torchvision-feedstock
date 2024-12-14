@@ -40,6 +40,9 @@ build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
   number: 1
+  script_env:
+    # required by the setup.py script to find the right version in 0.20.1
+    - BUILD_VERSION={{ version }}
   skip: true  # [win]
   # no CUDA-enabled pytorch on aarch yet
   skip: true  # [cuda_compiler_version != "None" and aarch64]
@@ -105,6 +108,7 @@ test:
     - expecttest
     - scipy
     - pytest-mock
+    - pip
   source_files:
     - test
     - references
@@ -176,6 +180,10 @@ test:
     # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
     # causing them to fail
     {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
+    # use pip list to check that the version is correctly reported
+    - pip list
+    - pip list | grep torchvision | grep {{ version }}         # [unix]
+    - pip check
     - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
     - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
