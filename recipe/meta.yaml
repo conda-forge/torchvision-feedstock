@@ -44,8 +44,8 @@ build:
     # required by the setup.py script to find the right version in 0.20.1
     - BUILD_VERSION={{ version }}
   skip: true  # [win]
-  # aarch doesn't have a build for cuda 11.8 yet
-  skip: true  # [ aarch64 and cuda_compiler_version == "11.8"]
+  # not supported by pytorch anymore
+  skip: true  # [cuda_compiler_version == "11.8"]
 
 requirements:
   build:
