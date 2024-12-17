@@ -1,4 +1,3 @@
-{% set tests_to_skip = "test_url_is_accessible" %}
 {% set version = "0.19.1" %}
 # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
 # torchvision requires that CUDA major and minor versions match with pytorch
@@ -44,8 +43,8 @@ build:
     # required by the setup.py script to find the right version in 0.20.1
     - BUILD_VERSION={{ version }}
   skip: true  # [win]
-  # no CUDA-enabled pytorch on aarch yet
-  skip: true  # [cuda_compiler_version != "None" and aarch64]
+  # CUDA-enabled pytorch on aarch yet only available for 12.0+
+  skip: true  # [aarch and cuda_compiler_version == "11.8"]
 
 requirements:
   build:
