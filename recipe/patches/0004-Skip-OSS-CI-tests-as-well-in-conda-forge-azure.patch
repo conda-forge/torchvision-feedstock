@@ -1,14 +1,14 @@
-From 789ab85e11606669c5e4a81830c5a034b713a07c Mon Sep 17 00:00:00 2001
+From c7e16dbf815db951ecaebdf2f6947ddf974d6748 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 25 Aug 2024 09:12:29 -0400
-Subject: [PATCH 4/4] Skip OSS CI tests as well in conda-forge azure
+Subject: [PATCH 4/6] Skip OSS CI tests as well in conda-forge azure
 
 ---
  test/common_utils.py | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/test/common_utils.py b/test/common_utils.py
-index 99c7931587..59768c5912 100644
+index 99c79315..59768c59 100644
 --- a/test/common_utils.py
 +++ b/test/common_utils.py
 @@ -25,6 +25,8 @@ from torchvision.transforms.v2.functional import to_image, to_pil_image
@@ -20,6 +20,3 @@ index 99c7931587..59768c5912 100644
  IN_RE_WORKER = os.environ.get("INSIDE_RE_WORKER") is not None
  IN_FBCODE = os.environ.get("IN_FBCODE_TORCHVISION") == "1"
  CUDA_NOT_AVAILABLE_MSG = "CUDA device not available"
--- 
-2.46.0
-

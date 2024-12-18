@@ -1,17 +1,17 @@
-From b8d4e24d0f6e04028d16ecd8aedc17e47aa18adf Mon Sep 17 00:00:00 2001
+From 6222a74d5748b72f1bdb18f3ee19f0f9f7686d94 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:38:27 -0400
-Subject: [PATCH 3/4] Support nvjpeg at conda-forge
+Subject: [PATCH 3/6] Support nvjpeg at conda-forge
 
 ---
  setup.py | 10 +++-------
  1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index 89ba2f1704..bcf05d4367 100644
+index faab505c..de37536d 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -311,13 +311,9 @@ def get_extensions():
+@@ -316,13 +316,9 @@ def get_extensions():
          print("Building torchvision without JPEG image support")
      image_macros += [("JPEG_FOUND", str(int(use_jpeg)))]
  
@@ -28,6 +28,3 @@ index 89ba2f1704..bcf05d4367 100644
  
      use_nvjpeg = use_nvjpeg and nvjpeg_found
      if use_nvjpeg:
--- 
-2.46.0
-
