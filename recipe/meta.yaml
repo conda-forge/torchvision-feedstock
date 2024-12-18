@@ -33,7 +33,7 @@ source:
     - patches/0004-Skip-OSS-CI-tests-as-well-in-conda-forge-azure.patch
 
     # https://github.com/pytorch/vision/issues/8609
-    - patches/no_strict_transforms_warning.patch
+    - patches/0005-no-strict-transforms-warning.patch
 
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]

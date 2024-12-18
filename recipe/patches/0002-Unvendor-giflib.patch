@@ -1,7 +1,7 @@
-From 358e56f66880c9d7d7acb9af20dcb4ad1059d722 Mon Sep 17 00:00:00 2001
+From c81ffce3a7c083d5db9980cecd54b92a9c8f9582 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:37:36 -0400
-Subject: [PATCH 2/4] Unvendor giflib
+Subject: [PATCH 2/5] Unvendor giflib
 
 ---
  setup.py                                     | 3 ++-
@@ -9,10 +9,10 @@ Subject: [PATCH 2/4] Unvendor giflib
  2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index c0c1050f78..89ba2f1704 100644
+index 5ba04566..faab505c 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -331,9 +331,10 @@ def get_extensions():
+@@ -336,9 +336,10 @@ def get_extensions():
      image_src = (
          glob.glob(os.path.join(image_path, "*.cpp"))
          + glob.glob(os.path.join(image_path, "cpu", "*.cpp"))
@@ -25,7 +25,7 @@ index c0c1050f78..89ba2f1704 100644
          image_src += glob.glob(os.path.join(image_path, "hip", "*.cpp"))
          # we need to exclude this in favor of the hipified source
 diff --git a/torchvision/csrc/io/image/cpu/decode_gif.cpp b/torchvision/csrc/io/image/cpu/decode_gif.cpp
-index 183d42e86a..b806f3359c 100644
+index 183d42e8..b806f335 100644
 --- a/torchvision/csrc/io/image/cpu/decode_gif.cpp
 +++ b/torchvision/csrc/io/image/cpu/decode_gif.cpp
 @@ -1,6 +1,6 @@
@@ -36,6 +36,3 @@ index 183d42e86a..b806f3359c 100644
  
  namespace vision {
  namespace image {
--- 
-2.46.0
-

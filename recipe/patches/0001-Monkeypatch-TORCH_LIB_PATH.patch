@@ -1,14 +1,14 @@
-From 01d0af0abb6a252773bfdac3e75ea777ea5d1bbc Mon Sep 17 00:00:00 2001
+From dff0af81d2989e64a7cbb85b2611a1626d8200f3 Mon Sep 17 00:00:00 2001
 From: Uwe Korn <uwelk@xhochy.com>
 Date: Wed, 21 Jun 2023 19:13:57 +0000
-Subject: [PATCH 1/2] Monkeypatch TORCH_LIB_PATH
+Subject: [PATCH 1/5] Monkeypatch TORCH_LIB_PATH
 
 ---
  setup.py | 5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/setup.py b/setup.py
-index ce1cd90c..bb429a74 100644
+index c0c1050f..5ba04566 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -11,6 +11,11 @@ from pkg_resources import DistributionNotFound, get_distribution, parse_version
