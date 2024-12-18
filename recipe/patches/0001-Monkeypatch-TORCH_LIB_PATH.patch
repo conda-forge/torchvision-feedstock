@@ -1,7 +1,7 @@
 From dff0af81d2989e64a7cbb85b2611a1626d8200f3 Mon Sep 17 00:00:00 2001
 From: Uwe Korn <uwelk@xhochy.com>
 Date: Wed, 21 Jun 2023 19:13:57 +0000
-Subject: [PATCH 1/5] Monkeypatch TORCH_LIB_PATH
+Subject: [PATCH 1/6] Monkeypatch TORCH_LIB_PATH
 
 ---
  setup.py | 5 +++++

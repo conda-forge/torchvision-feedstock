@@ -1,7 +1,7 @@
 From c81ffce3a7c083d5db9980cecd54b92a9c8f9582 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:37:36 -0400
-Subject: [PATCH 2/5] Unvendor giflib
+Subject: [PATCH 2/6] Unvendor giflib
 
 ---
  setup.py                                     | 3 ++-

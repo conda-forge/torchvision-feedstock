@@ -35,6 +35,9 @@ source:
     # https://github.com/pytorch/vision/issues/8609
     - patches/0005-no-strict-transforms-warning.patch
 
+    # backport https://github.com/pytorch/vision/pull/8776
+    - patches/0006-Fix-pyav-14-error-8776.patch
+
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]

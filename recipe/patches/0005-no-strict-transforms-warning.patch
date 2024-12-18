@@ -1,7 +1,7 @@
 From daa4f4d8ee40cd09e1d6630799d73161374c567f Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 19:06:59 -0400
-Subject: [PATCH 5/5] no strict transforms warning
+Subject: [PATCH 5/6] no strict transforms warning
 
 ---
  test/test_transforms_v2.py | 9 ---------
