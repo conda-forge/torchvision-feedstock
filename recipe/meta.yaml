@@ -92,6 +92,8 @@ requirements:
     # - requests
 
 test:
+  requires:
+    - pip
   imports:
     - torchvision
     - torchvision.datasets
@@ -116,7 +118,6 @@ outputs:
         - expecttest
         - scipy
         - pytest-mock
-        - pip
         - {{ pin_subpackage('torchvision', exact=True) }}
       source_files:
         - test
