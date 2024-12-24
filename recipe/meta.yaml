@@ -92,18 +92,6 @@ requirements:
     # - requests
 
 test:
-  requires:
-    - pytest
-    - requests
-    - av
-    - expecttest
-    - scipy
-    - pytest-mock
-    - pip
-  source_files:
-    - test
-    - references
-    - pytest.ini
   imports:
     - torchvision
     - torchvision.datasets
@@ -111,73 +99,92 @@ test:
     - torchvision.transforms
     - torchvision.utils
   commands:
-    # skip test_url_is_accessible instead of hitting 20+ servers per run, since
-    # each server might be occasionally unresponsive and end up failing our CI
-    {% set tests_to_skip = "test_url_is_accessible" %}
-    # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
-    {% set tests_to_skip = tests_to_skip + " or (test_transforms and test_adjust_saturation)" %}
-    # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
-    {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
-    # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
-    # It seems to fail around testing of vgg
-    # This test seems to just destroy the memory of the system.
-    {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
-    {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
-    # 2022/01/21 hmaarrfk (test_frame_reading)
-    # They indicate that there can be a 1% error in their test.
-    # However, this test seems to causing the CIs to fail when this
-    # case is hit. For example the last CI failed with
-    #
-    # >                   assert mean_delta.item() < 2.5
-    # E                   assert 2.502098560333252 < 2.5
-    {% set tests_to_skip = tests_to_skip + " or test_frame_reading" %}
-    # Random perspective tests can fail if the perspective is too sharp
-    # https://github.com/conda-forge/torchvision-feedstock/issues/38
-    {% set tests_to_skip = tests_to_skip + " or test_randomperspective_fill" %}
-    # Tolerance on the test_frozenbatchnorm2d_eps test seems to be too strict
-    {% set tests_to_skip = tests_to_skip + " or test_frozenbatchnorm2d_eps" %}
-    {% set tests_to_skip = tests_to_skip + " or test_random_apply" %}
-    # 2022/03/29 hmaarrfk
-    # It seems that this test can cause segmentation faults on the CIs.
-    {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
-    {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %}
-    # 2022/07 hmaarrfk really large memory tests. Fail on CIs
-    {% set tests_to_skip = tests_to_skip + " or test_memory_efficient_densenet" %}
-    {% set tests_to_skip = tests_to_skip + " or test_resnet_dilation" %}
-    {% set tests_to_skip = tests_to_skip + " or test_mobilenet_v2_residual_setting" %}
-    {% set tests_to_skip = tests_to_skip + " or test_mobilenet_norm_layer" %}
-    {% set tests_to_skip = tests_to_skip + " or test_inception_v3_eval" %}
-    {% set tests_to_skip = tests_to_skip + " or test_fasterrcnn_double" %}
-    {% set tests_to_skip = tests_to_skip + " or test_googlenet_eval" %}
-    {% set tests_to_skip = tests_to_skip + " or test_fasterrcnn_switch_devices" %}
-    {% set tests_to_skip = tests_to_skip + " or test_mobilenet_v2_residual_setting" %}
-    {% set tests_to_skip = tests_to_skip + " or test_vitc_models" %}
-    {% set tests_to_skip = tests_to_skip + " or test_classification_model" %}
-    {% set tests_to_skip = tests_to_skip + " or test_segmentation_model" %}
-    {% set tests_to_skip = tests_to_skip + " or test_detection_model" %}
-    {% set tests_to_skip = tests_to_skip + " or test_detection_model_validation" %}
-    {% set tests_to_skip = tests_to_skip + " or test_video_model" %}
-    {% set tests_to_skip = tests_to_skip + " or test_quantized_classification_model" %}
-    {% set tests_to_skip = tests_to_skip + " or test_detection_model_trainable_backbone_layers" %}
-    {% set tests_to_skip = tests_to_skip + " or test_raft" %}
-    {% set tests_to_skip = tests_to_skip + " or test_build_fx_feature_extractor" %}
-    # 2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'
-    {% set tests_to_skip = tests_to_skip + " or test_transformation_range" %}
-    {% set tests_to_skip = tests_to_skip + " or test_transformation_discrete" %}
-    # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
-    {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}
-    # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
-    {% set tests_to_skip = tests_to_skip + " or test_draw_boxes" %}
-    # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
-    # causing them to fail
-    {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
     # use pip list to manually check that the version is correctly reported
     # Otherwise downstream package's pip check may fail
     - pip list
     - pip list | grep torchvision | grep {{ version }}         # [unix]
     - pip check
-    - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
-    - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
+
+outputs:
+  - name: torchvision
+  - name: torchvision-tests
+    test:
+      requires:
+        - pytest
+        - requests
+        - av
+        - expecttest
+        - scipy
+        - pytest-mock
+        - pip
+        - {{ pin_subpackage('torchvision', exact=True) }}
+      source_files:
+        - test
+        - references
+        - pytest.ini
+      commands:
+        # skip test_url_is_accessible instead of hitting 20+ servers per run, since
+        # each server might be occasionally unresponsive and end up failing our CI
+        {% set tests_to_skip = "test_url_is_accessible" %}
+        # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
+        {% set tests_to_skip = tests_to_skip + " or (test_transforms and test_adjust_saturation)" %}
+        # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
+        {% set tests_to_skip = tests_to_skip + " or test_adjust_sharpness" %}  # [osx]
+        # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
+        # It seems to fail around testing of vgg
+        # This test seems to just destroy the memory of the system.
+        {% set tests_to_skip = tests_to_skip + " or test_forward_backward" %}
+        {% set tests_to_skip = tests_to_skip + " or test_jit_forward_backward" %}
+        # 2022/01/21 hmaarrfk (test_frame_reading)
+        # They indicate that there can be a 1% error in their test.
+        # However, this test seems to causing the CIs to fail when this
+        # case is hit. For example the last CI failed with
+        #
+        # >                   assert mean_delta.item() < 2.5
+        # E                   assert 2.502098560333252 < 2.5
+        {% set tests_to_skip = tests_to_skip + " or test_frame_reading" %}
+        # Random perspective tests can fail if the perspective is too sharp
+        # https://github.com/conda-forge/torchvision-feedstock/issues/38
+        {% set tests_to_skip = tests_to_skip + " or test_randomperspective_fill" %}
+        # Tolerance on the test_frozenbatchnorm2d_eps test seems to be too strict
+        {% set tests_to_skip = tests_to_skip + " or test_frozenbatchnorm2d_eps" %}
+        {% set tests_to_skip = tests_to_skip + " or test_random_apply" %}
+        # 2022/03/29 hmaarrfk
+        # It seems that this test can cause segmentation faults on the CIs.
+        {% set tests_to_skip = tests_to_skip + " or test_write_video_with_audio" %}
+        {% set tests_to_skip = tests_to_skip + " or test_video_clips_custom_fps" %}
+        # 2022/07 hmaarrfk really large memory tests. Fail on CIs
+        {% set tests_to_skip = tests_to_skip + " or test_memory_efficient_densenet" %}
+        {% set tests_to_skip = tests_to_skip + " or test_resnet_dilation" %}
+        {% set tests_to_skip = tests_to_skip + " or test_mobilenet_v2_residual_setting" %}
+        {% set tests_to_skip = tests_to_skip + " or test_mobilenet_norm_layer" %}
+        {% set tests_to_skip = tests_to_skip + " or test_inception_v3_eval" %}
+        {% set tests_to_skip = tests_to_skip + " or test_fasterrcnn_double" %}
+        {% set tests_to_skip = tests_to_skip + " or test_googlenet_eval" %}
+        {% set tests_to_skip = tests_to_skip + " or test_fasterrcnn_switch_devices" %}
+        {% set tests_to_skip = tests_to_skip + " or test_mobilenet_v2_residual_setting" %}
+        {% set tests_to_skip = tests_to_skip + " or test_vitc_models" %}
+        {% set tests_to_skip = tests_to_skip + " or test_classification_model" %}
+        {% set tests_to_skip = tests_to_skip + " or test_segmentation_model" %}
+        {% set tests_to_skip = tests_to_skip + " or test_detection_model" %}
+        {% set tests_to_skip = tests_to_skip + " or test_detection_model_validation" %}
+        {% set tests_to_skip = tests_to_skip + " or test_video_model" %}
+        {% set tests_to_skip = tests_to_skip + " or test_quantized_classification_model" %}
+        {% set tests_to_skip = tests_to_skip + " or test_detection_model_trainable_backbone_layers" %}
+        {% set tests_to_skip = tests_to_skip + " or test_raft" %}
+        {% set tests_to_skip = tests_to_skip + " or test_build_fx_feature_extractor" %}
+        # 2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'
+        {% set tests_to_skip = tests_to_skip + " or test_transformation_range" %}
+        {% set tests_to_skip = tests_to_skip + " or test_transformation_discrete" %}
+        # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
+        {% set tests_to_skip = tests_to_skip + " or test_batched_vs_single" %}
+        # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
+        {% set tests_to_skip = tests_to_skip + " or test_draw_boxes" %}
+        # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
+        # causing them to fail
+        {% set tests_to_skip = tests_to_skip + " or test_pretrained_pos or test_equivalent_behavior_weights" %}
+        - pytest --verbose -k "not ({{ tests_to_skip }})" --durations=50 test/  # [not aarch64]
+        - pytest -k "not ({{ tests_to_skip }})" --durations=50 test/  # [aarch64 and (build_platform == target_platform)]
 
 about:
   home: http://pytorch.org/
