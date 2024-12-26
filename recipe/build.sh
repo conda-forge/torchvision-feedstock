@@ -27,4 +27,10 @@ rm -rf torchvision/csrc/io/image/cpu/giflib
 export TORCHVISION_USE_FFMPEG=0
 export TORCHVISION_USE_NVJPEG=${FORCE_CUDA}
 export TORCHVISION_INCLUDE="${PREFIX}/include/"
+
+# disabled by default but with a TODO to "enable by default"
+export TORCHVISION_USE_AVIF=1
+# (typo upstream)
+export TORCHVISION_USE_HEIC=1
+
 ${PYTHON} -m pip install . -vv --no-deps --no-build-isolation

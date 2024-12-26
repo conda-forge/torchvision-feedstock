@@ -138,6 +138,8 @@ outputs:
             - libcusolver-dev
             - libcusparse-dev
             - libnvjpeg-dev
+        - libavif
+        - libheif
         - libjpeg-turbo
         - libpng
         - libwebp
