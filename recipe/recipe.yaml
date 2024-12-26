@@ -70,7 +70,7 @@ context:
     ${{ 'causing them to fail' if 0 }}
     or test_pretrained_pos or test_equivalent_behavior_weights
     ${{ '2024/12 These tests use Internet' if 0 }}
-    or test_decode_gif or test_download_url
+    or test_decode_gif or test_download_url or "test_get_model[lraspp"
 
 recipe:
   name: torchvision
