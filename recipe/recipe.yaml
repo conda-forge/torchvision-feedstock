@@ -139,7 +139,7 @@ outputs:
             - libcusparse-dev
             - libnvjpeg-dev
         - libavif
-        - libheif
+        - libheif * [build=lgpl*]
         - libjpeg-turbo
         - libpng
         - libwebp
