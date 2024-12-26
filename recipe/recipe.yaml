@@ -201,11 +201,12 @@ outputs:
             - expecttest
             - scipy
             - pytest-mock
+            - pytest-socket
         script:
           - if: not aarch64
-            then: pytest --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
+            then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform == target_platform)
-            then: pytest -k "not (${{ tests_to_skip }})" --durations=50 test/
+            then: pytest --disable-socket -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform != target_platform)
             then: true
 
