@@ -69,6 +69,8 @@ context:
     ${{ '2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased' if 0 }}
     ${{ 'causing them to fail' if 0 }}
     or test_pretrained_pos or test_equivalent_behavior_weights
+    ${{ '2024/12 These tests use Internet' if 0 }}
+    or test_decode_gif or test_download_url
 
 recipe:
   name: torchvision
