@@ -139,7 +139,10 @@ outputs:
             - libcusparse-dev
             - libnvjpeg-dev
         - libavif
-        - libheif * [build=lgpl*]
+        # Add a "naked" libheif so that the global pinning is picked up
+        - libheif
+        # Add a constraint on the build time configuration of libheif to avoid gpl code
+        - libheif [build=lgpl*]
         - libjpeg-turbo
         - libpng
         - libwebp
