@@ -1,6 +1,6 @@
 context:
   version: 0.20.1
-  build_number: 2
+  build_number: 3
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -69,6 +69,8 @@ context:
     ${{ '2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased' if 0 }}
     ${{ 'causing them to fail' if 0 }}
     or test_pretrained_pos or test_equivalent_behavior_weights
+    ${{ '2024/12 These tests use Internet' if 0 }}
+    or test_decode_gif or test_download_url or "test_get_model[lraspp"
 
 recipe:
   name: torchvision
@@ -136,6 +138,11 @@ outputs:
             - libcusolver-dev
             - libcusparse-dev
             - libnvjpeg-dev
+        - libavif
+        # Add a "naked" libheif so that the global pinning is picked up
+        - libheif
+        # Add a constraint on the build time configuration of libheif to avoid gpl code
+        - libheif [build=lgpl*]
         - libjpeg-turbo
         - libpng
         - libwebp
@@ -201,11 +208,12 @@ outputs:
             - expecttest
             - scipy
             - pytest-mock
+            - pytest-socket
         script:
           - if: not aarch64
-            then: pytest --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
+            then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform == target_platform)
-            then: pytest -k "not (${{ tests_to_skip }})" --durations=50 test/
+            then: pytest --disable-socket -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform != target_platform)
             then: true
 
