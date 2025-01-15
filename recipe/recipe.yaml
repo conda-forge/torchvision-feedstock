@@ -191,7 +191,7 @@ outputs:
   - package:
       name: torchvision-tests
     build:
-      script: true
+      script: ${{ 'true' if unix else 'exit /b 0' }}
     requirements:
       run:
         - ${{ pin_subpackage('torchvision', exact=True) }}
@@ -215,6 +215,7 @@ outputs:
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform == target_platform)
             then: pytest --disable-socket -k "not (${{ tests_to_skip }})" --durations=50 test/
+          # Needed to avoid "expected field `script` to be a list of commands" on aarch64
           - if: aarch64 and (build_platform != target_platform)
             then: true
 
