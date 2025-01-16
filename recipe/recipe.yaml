@@ -133,7 +133,7 @@ outputs:
         - setuptools
         - if: cuda_compiler_version != "None"
           then:
-            - cuda-version {{ cuda_compiler_version }}
+            - cuda-version ==${{ cuda_compiler_version }}
             - cudnn
             - libcublas-dev
             - libcusolver-dev
