@@ -70,7 +70,8 @@ requirements:
     # - numpy
     - pip
     - setuptools
-    - cudnn                                  # [cuda_compiler_version != "None"]
+    - cudnn                                     # [cuda_compiler_version != "None"]
+    - cuda-version {{ cuda_compiler_version }}  # [(cuda_compiler_version or "None") != "None"]
     {% if cuda_major >= 12 %}
     - libcublas-dev
     - libcusolver-dev
