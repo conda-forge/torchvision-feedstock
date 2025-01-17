@@ -1,7 +1,7 @@
 From daa4f4d8ee40cd09e1d6630799d73161374c567f Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 19:06:59 -0400
-Subject: [PATCH 5/6] no strict transforms warning
+Subject: [PATCH 5/7] no strict transforms warning
 
 ---
  test/test_transforms_v2.py | 9 ---------
@@ -13,8 +13,8 @@ index 07e3d75d..1a9c3475 100644
 +++ b/test/test_transforms_v2.py
 @@ -53,15 +53,6 @@ from torchvision.transforms.v2.functional._geometry import _get_perspective_coef
  from torchvision.transforms.v2.functional._utils import _get_kernel, _register_kernel_internal
- 
- 
+
+
 -# turns all warnings into errors for this module
 -pytestmark = [pytest.mark.filterwarnings("error")]
 -

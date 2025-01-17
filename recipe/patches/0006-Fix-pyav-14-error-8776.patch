@@ -1,7 +1,7 @@
 From 396e220829f9d06d4c2259e98fe907cafada7d98 Mon Sep 17 00:00:00 2001
 From: Nicolas Hug <nh.nicolas.hug@gmail.com>
 Date: Mon, 2 Dec 2024 17:11:38 +0000
-Subject: [PATCH 6/6] Fix pyav 14 error (#8776)
+Subject: [PATCH 6/7] Fix pyav 14 error (#8776)
 
 ---
  torchvision/io/video.py | 22 ++++++++++++++++------
@@ -23,7 +23,7 @@ index 9b2eacba..0c72e68b 100644
      av = ImportError(
          """\
 @@ -129,7 +133,13 @@ def write_video(
- 
+
          for img in video_array:
              frame = av.VideoFrame.from_ndarray(img, format="rgb24")
 -            frame.pict_type = "NONE"
@@ -36,7 +36,7 @@ index 9b2eacba..0c72e68b 100644
 +
              for packet in stream.encode(frame):
                  container.mux(packet)
- 
+
 @@ -189,7 +199,7 @@ def _read_from_stream(
      try:
          # TODO check if stream needs to always be the video stream here or not
@@ -58,12 +58,12 @@ index 9b2eacba..0c72e68b 100644
 @@ -316,7 +326,7 @@ def read_video(
                      )
                      info["audio_fps"] = container.streams.audio[0].rate
- 
+
 -        except av.AVError:
 +        except FFmpegError:
              # TODO raise a warning?
              pass
- 
+
 @@ -399,10 +409,10 @@ def read_video_timestamps(filename: str, pts_unit: str = "pts") -> Tuple[List[in
                  video_time_base = video_stream.time_base
                  try:
@@ -76,4 +76,3 @@ index 9b2eacba..0c72e68b 100644
 +    except FFmpegError as e:
          msg = f"Failed to open container for {filename}; Caught error: {e}"
          warnings.warn(msg, RuntimeWarning)
- 

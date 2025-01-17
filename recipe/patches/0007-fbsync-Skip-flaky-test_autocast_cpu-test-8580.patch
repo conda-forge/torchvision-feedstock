@@ -1,0 +1,34 @@
+From ee39d63fe527427eb70f55a90f0f9987e20596a5 Mon Sep 17 00:00:00 2001
+From: Nicolas Hug <nicolashug@meta.com>
+Date: Thu, 15 Aug 2024 06:13:14 -0700
+Subject: [PATCH 7/7] [fbsync] Skip flaky test_autocast_cpu test (#8580)
+
+Reviewed By: ahmadsharif1
+
+Differential Revision: D61331607
+
+fbshipit-source-id: cb66215023ea77336b9d16180c362cba3dde6201
+---
+ test/test_ops.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/test/test_ops.py b/test/test_ops.py
+index 99b259f73f..22ba0ce2d5 100644
+--- a/test/test_ops.py
++++ b/test/test_ops.py
+@@ -507,11 +507,13 @@ class TestRoIAlign(RoIOpTester):
+                 rois_dtype=rois_dtype,
+             )
+
++    @pytest.mark.skip(reason="1/5000 flaky failure")
+     @pytest.mark.parametrize("aligned", (True, False))
+     @pytest.mark.parametrize("deterministic", (True, False))
+     @pytest.mark.parametrize("x_dtype", (torch.float, torch.bfloat16))
+     @pytest.mark.parametrize("rois_dtype", (torch.float, torch.bfloat16))
+     def test_autocast_cpu(self, aligned, deterministic, x_dtype, rois_dtype):
++
+         with torch.cpu.amp.autocast():
+             self.test_forward(
+                 torch.device("cpu"),
+--
+2.47.0

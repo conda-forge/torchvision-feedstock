@@ -1,7 +1,7 @@
 From c7e16dbf815db951ecaebdf2f6947ddf974d6748 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 25 Aug 2024 09:12:29 -0400
-Subject: [PATCH 4/6] Skip OSS CI tests as well in conda-forge azure
+Subject: [PATCH 4/7] Skip OSS CI tests as well in conda-forge azure
 
 ---
  test/common_utils.py | 2 ++
@@ -12,8 +12,8 @@ index 99c79315..59768c59 100644
 --- a/test/common_utils.py
 +++ b/test/common_utils.py
 @@ -25,6 +25,8 @@ from torchvision.transforms.v2.functional import to_image, to_pil_image
- 
- 
+
+
  IN_OSS_CI = any(os.getenv(var) == "true" for var in ["CIRCLECI", "GITHUB_ACTIONS"])
 +# conda-forge defines the CI variable
 +IN_OSS_CI = IN_OSS_CI or (os.getenv('CI') == 'azure')

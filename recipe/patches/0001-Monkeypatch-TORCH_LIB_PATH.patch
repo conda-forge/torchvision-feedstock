@@ -1,7 +1,7 @@
 From dff0af81d2989e64a7cbb85b2611a1626d8200f3 Mon Sep 17 00:00:00 2001
 From: Uwe Korn <uwelk@xhochy.com>
 Date: Wed, 21 Jun 2023 19:13:57 +0000
-Subject: [PATCH 1/6] Monkeypatch TORCH_LIB_PATH
+Subject: [PATCH 1/7] Monkeypatch TORCH_LIB_PATH
 
 ---
  setup.py | 5 +++++
@@ -14,12 +14,12 @@ index c0c1050f..5ba04566 100644
 @@ -11,6 +11,11 @@ from pkg_resources import DistributionNotFound, get_distribution, parse_version
  from setuptools import find_packages, setup
  from torch.utils.cpp_extension import BuildExtension, CppExtension, CUDA_HOME, CUDAExtension
- 
+
 +import site
 +import torch.utils.cpp_extension
 +
 +torch.utils.cpp_extension.TORCH_LIB_PATH = site.getsitepackages()[0] + '/torch/lib'
 +
- 
+
  def read(*names, **kwargs):
      with open(os.path.join(os.path.dirname(__file__), *names), encoding=kwargs.get("encoding", "utf8")) as fp:

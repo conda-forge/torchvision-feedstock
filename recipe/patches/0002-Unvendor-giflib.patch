@@ -1,7 +1,7 @@
 From c81ffce3a7c083d5db9980cecd54b92a9c8f9582 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sat, 24 Aug 2024 18:37:36 -0400
-Subject: [PATCH 2/6] Unvendor giflib
+Subject: [PATCH 2/7] Unvendor giflib
 
 ---
  setup.py                                     | 3 ++-
@@ -18,7 +18,7 @@ index 5ba04566..faab505c 100644
          + glob.glob(os.path.join(image_path, "cpu", "*.cpp"))
 -        + glob.glob(os.path.join(image_path, "cpu", "giflib", "*.c"))
      )
- 
+
 +    image_link_flags.append("gif")
 +
      if is_rocm_pytorch:
@@ -33,6 +33,6 @@ index 183d42e8..b806f335 100644
  #include <cstring>
 -#include "giflib/gif_lib.h"
 +#include <gif_lib.h>
- 
+
  namespace vision {
  namespace image {
