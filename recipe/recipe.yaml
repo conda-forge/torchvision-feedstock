@@ -1,13 +1,10 @@
 context:
   version: 0.20.1
-  build_number: 5
+  build_number: 6
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
   torch_proc_type: ${{ "cuda" ~ cuda_compiler_version | version_to_buildstring if cuda_compiler_version != "None" else "cpu" }}
-  # Upstream has specific compatability ranges for pytorch and python which are
-  # updated every 0.x release. https://github.com/pytorch/vision#installation
-  compatible_pytorch: 2.5
 
   tests_to_skip: >
     ${{ 'skip test_url_is_accessible instead of hitting 20+ servers per run, since' if 0 }}
@@ -95,7 +92,7 @@ build:
   number: ${{ build_number }}
   string: ${{ torch_proc_type }}_py${{ python | version_to_buildstring }}_h${{ hash }}_${{ build_number }}
   # CUDA < 12 not supported by pytorch anymore
-  skip: cuda_compiler_version == "11.8" or win
+  skip: cuda_compiler_version == "11.8"
 
 outputs:
   - package:
@@ -125,7 +122,8 @@ outputs:
             - python
             - cross-python_${{ target_platform }}
             # - numpy
-            - pytorch ${{ compatible_pytorch }}.* [build=${{ torch_proc_type }}*]
+            - pytorch
+            - pytorch * [build=${{ torch_proc_type }}*]
       host:
         - python
         # - numpy
@@ -155,12 +153,14 @@ outputs:
         # - ffmpeg {{ ffmpeg }} [build=lgpl_*]
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        - libtorch ${{ compatible_pytorch }}.* [build=${{ torch_proc_type }}*]
-        - pytorch ${{ compatible_pytorch }}.* [build=${{ torch_proc_type }}*]
+        - libtorch
+        - libtorch * [build=${{ torch_proc_type }}*]
+        - pytorch
+        - pytorch * [build=${{ torch_proc_type }}*]
         - requests
       run:
         - python
-        - pytorch ${{ compatible_pytorch }}.* [build=${{ torch_proc_type }}*]
+        - pytorch * [build=${{ torch_proc_type }}*]
         - if: cuda_compiler_version != "None"
           then:
             - ${{ pin_compatible('cudnn') }}
@@ -191,7 +191,7 @@ outputs:
   - package:
       name: torchvision-tests
     build:
-      script: true
+      script: ${{ 'true' if unix else 'exit /b 0' }}
     requirements:
       run:
         - ${{ pin_subpackage('torchvision', exact=True) }}
@@ -215,6 +215,7 @@ outputs:
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
           - if: aarch64 and (build_platform == target_platform)
             then: pytest --disable-socket -k "not (${{ tests_to_skip }})" --durations=50 test/
+          # Needed to avoid "expected field `script` to be a list of commands" on aarch64
           - if: aarch64 and (build_platform != target_platform)
             then: true
 
