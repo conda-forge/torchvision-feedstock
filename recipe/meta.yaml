@@ -38,10 +38,13 @@ source:
     # backport https://github.com/pytorch/vision/pull/8776
     - patches/0006-Fix-pyav-14-error-8776.patch
 
+    # backport https://github.com/pytorch/vision/pull/8580
+    - patches/0007-fbsync-Skip-flaky-test_autocast_cpu-test-8580.patch
+
 build:
   string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
-  number: 2
+  number: 3
   script_env:
     # required by the setup.py script to find the right version in 0.20.1
     - BUILD_VERSION={{ version }}
@@ -70,7 +73,8 @@ requirements:
     # - numpy
     - pip
     - setuptools
-    - cudnn                                  # [cuda_compiler_version != "None"]
+    - cudnn                                     # [cuda_compiler_version != "None"]
+    - cuda-version {{ cuda_compiler_version }}  # [(cuda_compiler_version or "None") != "None"]
     {% if cuda_major >= 12 %}
     - libcublas-dev
     - libcusolver-dev
