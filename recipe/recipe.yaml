@@ -84,9 +84,6 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
-    # Can likely remove after 0.20.1
-    # https://github.com/pytorch/vision/pull/8776
-    - patches/8776_compatibility_with_pyav_14.patch
 
 build:
   number: ${{ build_number }}
