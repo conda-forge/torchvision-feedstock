@@ -24,10 +24,6 @@ cxx_compiler_version:
 - '18'
 giflib:
 - '5.2'
-libavif:
-- '1'
-libheif:
-- '1.19'
 libjpeg_turbo:
 - '3'
 libpng:

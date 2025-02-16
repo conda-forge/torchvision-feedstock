@@ -16,10 +16,6 @@ cxx_compiler:
 - vs2019
 giflib:
 - '5.2'
-libavif:
-- '1'
-libheif:
-- '1.19'
 libjpeg_turbo:
 - '3'
 libpng:
