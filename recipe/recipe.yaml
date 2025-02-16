@@ -1,6 +1,6 @@
 context:
-  version: 0.20.1
-  build_number: 6
+  version: 0.21.0
+  build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -68,6 +68,9 @@ context:
     or test_pretrained_pos or test_equivalent_behavior_weights
     ${{ '2024/12 These tests use Internet' if 0 }}
     or test_decode_gif or test_download_url or "test_get_model[lraspp"
+    ${{ " or (TestPerspective and test_transform and make_image)" if osx }}
+    ${{ "needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22" if 0 }}
+    ${{ " or decode_avif or decode_heic" if linux }}
 
 recipe:
   name: torchvision
@@ -75,7 +78,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 7e08c7f56e2c89859310e53d898f72bccc4987cd83e08cfd6303513da15a9e71
+  sha256: 0a4a967bbb7f9810f792cd0289a07fb98c8fb5d1303fae8b63e3a6b05d720058
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
@@ -84,9 +87,6 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
-    # Can likely remove after 0.20.1
-    # https://github.com/pytorch/vision/pull/8776
-    - patches/8776_compatibility_with_pyav_14.patch
 
 build:
   number: ${{ build_number }}
@@ -137,11 +137,6 @@ outputs:
             - libcusolver-dev
             - libcusparse-dev
             - libnvjpeg-dev
-        - libavif
-        # Add a "naked" libheif so that the global pinning is picked up
-        - libheif
-        # Add a constraint on the build time configuration of libheif to avoid gpl code
-        - libheif [build=lgpl*]
         - libjpeg-turbo
         - libpng
         - libwebp

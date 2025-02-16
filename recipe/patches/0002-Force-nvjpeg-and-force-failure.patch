@@ -1,4 +1,4 @@
-From b9cbc7dc9d20f8813ba3644f65a15a4ceb9530e0 Mon Sep 17 00:00:00 2001
+From e5aaad7f5584dd73a231ce94ec8a87160a3b4e48 Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 3 Nov 2024 22:04:00 -0500
 Subject: [PATCH 2/3] Force nvjpeg and force failure
@@ -8,11 +8,11 @@ Subject: [PATCH 2/3] Force nvjpeg and force failure
  1 file changed, 7 insertions(+), 10 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index a30d6536ad..ebf70f5ac6 100644
+index 3b4e17a..e993e0c 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -369,17 +369,14 @@ def make_image_extension():
-             warnings.warn("Building torchvision without AVIF support")
+@@ -335,17 +335,14 @@ def make_image_extension():
+             warnings.warn("Building torchvision without WEBP support")
  
      if USE_NVJPEG and (torch.cuda.is_available() or FORCE_CUDA):
 -        nvjpeg_found = CUDA_HOME is not None and (Path(CUDA_HOME) / "include/nvjpeg.h").exists()
@@ -36,6 +36,3 @@ index a30d6536ad..ebf70f5ac6 100644
  
      return Extension(
          name="torchvision.image",
--- 
-2.47.0
-
