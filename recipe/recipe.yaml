@@ -1,6 +1,6 @@
 context:
   version: 0.21.0
-  build_number: 0
+  build_number: 1
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -87,6 +87,9 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
+    # Point users to use the conda-forge package for the extra codecs (heif and avif)
+    # https://github.com/conda-forge/torchvision-feedstock/pull/115
+    - patches/0004-Point-users-to-the-conda-package-for-extra-codecs.patch
 
 build:
   number: ${{ build_number }}
