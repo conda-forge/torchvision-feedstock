@@ -69,6 +69,8 @@ context:
     ${{ '2024/12 These tests use Internet' if 0 }}
     or test_decode_gif or test_download_url or "test_get_model[lraspp"
     ${{ " or (TestPerspective and test_transform and make_image)" if osx }}
+    ${{ "needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22" if 0 }}
+    ${{ " or decode_avif or decode_heic" if linux }}
 
 recipe:
   name: torchvision
