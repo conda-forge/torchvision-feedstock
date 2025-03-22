@@ -163,7 +163,9 @@ outputs:
         # They don't really document it, but it seems that they want a minimum version
         # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
         - numpy >=1.23.5
-        - torchvision-extra-decoders
+        - if: unix
+          then:
+            - torchvision-extra-decoders
     tests:
       - python:
           imports:
