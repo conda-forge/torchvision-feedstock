@@ -1,6 +1,6 @@
 context:
   version: 0.21.0
-  build_number: 0
+  build_number: 1
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -163,9 +163,9 @@ outputs:
         # They don't really document it, but it seems that they want a minimum version
         # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
         - numpy >=1.23.5
-        # While their conda package depends on requests, it seems it is only used for some test
-        # scripts and not the runtime
-        # - requests
+        - if: unix
+          then:
+            - torchvision-extra-decoders
     tests:
       - python:
           imports:
