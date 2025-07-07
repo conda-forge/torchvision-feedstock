@@ -4,8 +4,7 @@ context:
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
-  # The aforementioned code has been patched in 0004-Allow-different-CUDA-minor-versions.patch to just check for the major version.
-  torch_proc_type: ${{ "cuda" ~ cuda_compiler_version.split(".")[0] if cuda_compiler_version != "None" else "cpu" }}
+  torch_proc_type: ${{ "cuda" if cuda_compiler_version != "None" else "cpu" }}
 
   tests_to_skip: >
     ${{ 'skip test_url_is_accessible instead of hitting 20+ servers per run, since' if 0 }}
