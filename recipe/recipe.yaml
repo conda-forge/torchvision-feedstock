@@ -212,6 +212,7 @@ outputs:
             # pillow 11.3 issues warnings DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)
             # Which triggers test failures in torchvision 0.22.0
             # This entire line can be removed once the tests are addressed, likely in the next version of torchvision???
+            # See proposed fix https://github.com/pytorch/vision/pull/9150
             - pillow <11.3
         script:
           - if: not aarch64
