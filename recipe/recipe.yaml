@@ -208,6 +208,11 @@ outputs:
             - scipy
             - pytest-mock
             - pytest-socket
+            # hmaarrfk - Jul 15, 2025
+            # pillow 11.3 issues warnings DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)
+            # Which triggers test failures in torchvision 0.22.0
+            # This entire line can be removed once the tests are addressed, likely in the next version of torchvision???
+            - pillow <11.3
         script:
           - if: not aarch64
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
