@@ -1,5 +1,5 @@
 c_compiler:
-- vs2019
+- vs2022
 c_stdlib:
 - vs
 channel_sources:
@@ -7,13 +7,13 @@ channel_sources:
 channel_targets:
 - conda-forge main
 cuda_compiler:
-- None
+- cuda-nvcc
 cuda_compiler_version:
 - None
 cudnn:
 - '9'
 cxx_compiler:
-- vs2019
+- vs2022
 giflib:
 - '5.2'
 libjpeg_turbo:
@@ -34,6 +34,3 @@ pytorch:
 - '2.7'
 target_platform:
 - win-64
-zip_keys:
-- - cuda_compiler
-  - cuda_compiler_version
