@@ -9,7 +9,7 @@ set "TORCHVISION_USE_HEIC=1"
 set "TORCHVISION_USE_FFMPEG=0"
 
 if not "%cuda_compiler_version%" == "None" (
-    set TORCH_CUDA_ARCH_LIST=5.0;6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX
+    set TORCH_CUDA_ARCH_LIST=5.0;6.0;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX
     set FORCE_CUDA=1
     set TORCHVISION_USE_NVJPEG=1
 ) else (

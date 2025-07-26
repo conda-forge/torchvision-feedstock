@@ -1,6 +1,6 @@
 context:
   version: 0.22.0
-  build_number: 1
+  build_number: 2
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -114,14 +114,14 @@ outputs:
             - ${{ compiler('cuda') }}
         # avoid nested conditions because of
         # https://github.com/conda-forge/conda-smithy/issues/2165
-        - if: build_platform != target_platform and cuda_compiler_version != "None"
-          then:
-            - libcublas-dev
-            - libcusolver-dev
-            - libcusparse-dev
-            - libnvjpeg-dev
         - if: build_platform != target_platform
           then:
+            - if: cuda_compiler_version != "None"
+              then:
+                - libcublas-dev
+                - libcusolver-dev
+                - libcusparse-dev
+                - libnvjpeg-dev
             - python
             - cross-python_${{ target_platform }}
             # - numpy
