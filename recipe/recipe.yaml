@@ -1,6 +1,6 @@
 context:
-  version: 0.22.0
-  build_number: 2
+  version: 0.22.1
+  build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -78,7 +78,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 83ed8855cdfb138aba6f116f8fd8da8b83463170dad67a70f60327915ed12014
+  sha256: fa1b0a58e13c08329bcff8d52607b4e25944fd074c01dee1b501c8158fadcdec
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
