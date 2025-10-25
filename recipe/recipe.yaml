@@ -147,7 +147,7 @@ outputs:
         # https://github.com/pytorch/vision/pull/8406/files#r1730151047
         - giflib
         # Specify lgpl version of ffmpeg so that there are
-        # no quesitons about the license of the resulting binary
+        # no questions about the license of the resulting binary
         # hmaarrfk: 2022/07, I think that torchvision just has bugs with ffmpeg
         # - ffmpeg {{ ffmpeg }} [build=lgpl_*]
         # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
