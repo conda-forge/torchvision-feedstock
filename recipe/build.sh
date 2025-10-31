@@ -20,7 +20,7 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
   CXXFLAGS="$(echo ${CXXFLAGS} | sed 's/ -march=[^ ]*//g' | sed 's/ -mcpu=[^ ]*//g' |sed 's/ -mtune=[^ ]*//g')"
 
   # remove build prefix headers that conflict wtih cross compilation
-  rm -rf "$BUILD_PREFIX/venv/lib/python3.*/site-packages/torch/include/torch/csrc/api/include/"
+  rm -rf "${BUILD_PREFIX}"/venv/lib/python3.*/site-packages/torch/include/torch/csrc/api/include/
 fi
 
 # remove pyproject.toml
