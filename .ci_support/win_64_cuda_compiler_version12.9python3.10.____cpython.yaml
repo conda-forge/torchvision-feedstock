@@ -11,7 +11,7 @@ cuda_compiler:
 cuda_compiler_version:
 - '12.9'
 cudnn:
-- '9'
+- '9.10'
 cxx_compiler:
 - vs2022
 giflib:
@@ -34,3 +34,6 @@ pytorch:
 - '2.8'
 target_platform:
 - win-64
+zip_keys:
+- - cuda_compiler_version
+  - cudnn
