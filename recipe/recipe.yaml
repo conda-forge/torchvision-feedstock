@@ -202,6 +202,7 @@ outputs:
             - scipy
             - pytest-mock
             - pytest-socket
+            - pycocotools
         script:
           - if: not aarch64
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
