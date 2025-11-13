@@ -34,6 +34,3 @@ pytorch:
 - '2.8'
 target_platform:
 - win-64
-zip_keys:
-- - cuda_compiler_version
-  - cudnn
