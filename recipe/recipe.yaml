@@ -120,6 +120,7 @@ outputs:
             - if: cuda_compiler_version != "None"
               then:
                 - libcublas-dev
+                - libcudnn-dev
                 - libcusolver-dev
                 - libcusparse-dev
                 - libnvjpeg-dev
@@ -136,8 +137,8 @@ outputs:
         - if: cuda_compiler_version != "None"
           then:
             - cuda-version ==${{ cuda_compiler_version }}
-            - cudnn
             - libcublas-dev
+            - libcudnn-dev
             - libcusolver-dev
             - libcusparse-dev
             - libnvjpeg-dev
@@ -160,9 +161,6 @@ outputs:
       run:
         - python
         - pytorch * [build=${{ torch_proc_type }}*]
-        - if: cuda_compiler_version != "None"
-          then:
-            - ${{ pin_compatible('cudnn') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
         # They don't really document it, but it seems that they want a minimum version
         # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
