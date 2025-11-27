@@ -10,8 +10,6 @@ cuda_compiler:
 - cuda-nvcc
 cuda_compiler_version:
 - '12.9'
-cudnn:
-- '9.10'
 cxx_compiler:
 - vs2022
 giflib:
@@ -21,9 +19,11 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 libtorch:
-- '2.8'
+- '2.9'
 libwebp:
 - '1'
+numpy:
+- '2'
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -31,9 +31,6 @@ pin_run_as_build:
 python:
 - 3.12.* *_cpython
 pytorch:
-- '2.8'
+- '2.9'
 target_platform:
 - win-64
-zip_keys:
-- - cuda_compiler_version
-  - cudnn

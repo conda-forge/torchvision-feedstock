@@ -1,6 +1,6 @@
 context:
   version: "0.24.0"
-  build_number: 2
+  build_number: 3
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -95,8 +95,6 @@ source:
 build:
   number: ${{ build_number }}
   string: ${{ build_string_prefix }}_py${{ python | version_to_buildstring }}_h${{ hash }}_${{ build_number }}
-  # CUDA < 12 not supported by pytorch anymore
-  skip: cuda_compiler_version == "11.8"
 
 outputs:
   - package:
@@ -120,24 +118,25 @@ outputs:
             - if: cuda_compiler_version != "None"
               then:
                 - libcublas-dev
+                - libcudnn-dev
                 - libcusolver-dev
                 - libcusparse-dev
                 - libnvjpeg-dev
             - python
             - cross-python_${{ target_platform }}
-            # - numpy
+            - numpy
             - pytorch
             - pytorch * [build=${{ torch_proc_type }}*]
       host:
         - python
-        # - numpy
+        - numpy
         - pip
         - setuptools
         - if: cuda_compiler_version != "None"
           then:
             - cuda-version ==${{ cuda_compiler_version }}
-            - cudnn
             - libcublas-dev
+            - libcudnn-dev
             - libcusolver-dev
             - libcusparse-dev
             - libnvjpeg-dev
@@ -160,13 +159,7 @@ outputs:
       run:
         - python
         - pytorch * [build=${{ torch_proc_type }}*]
-        - if: cuda_compiler_version != "None"
-          then:
-            - ${{ pin_compatible('cudnn') }}
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        # They don't really document it, but it seems that they want a minimum version
-        # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
-        - numpy >=1.23.5
         - if: unix
           then:
             - torchvision-extra-decoders
@@ -209,12 +202,6 @@ outputs:
             - scipy
             - pytest-mock
             - pytest-socket
-            # hmaarrfk - Jul 15, 2025
-            # pillow 11.3 issues warnings DeprecationWarning: 'mode' parameter is deprecated and will be removed in Pillow 13 (2026-10-15)
-            # Which triggers test failures in torchvision 0.22.0
-            # This entire line can be removed once the tests are addressed, likely in the next version of torchvision???
-            # See proposed fix https://github.com/pytorch/vision/pull/9150
-            - pillow <11.3
         script:
           - if: not aarch64
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
