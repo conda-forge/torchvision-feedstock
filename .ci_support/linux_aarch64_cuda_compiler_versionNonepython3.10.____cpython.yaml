@@ -14,8 +14,6 @@ cuda_compiler:
 - cuda-nvcc
 cuda_compiler_version:
 - None
-cudnn:
-- '9'
 cxx_compiler:
 - gxx
 cxx_compiler_version:
@@ -32,6 +30,8 @@ libtorch:
 - '2.9'
 libwebp:
 - '1'
+numpy:
+- '2'
 pin_run_as_build:
   python:
     min_pin: x.x
