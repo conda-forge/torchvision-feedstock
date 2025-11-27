@@ -1,6 +1,6 @@
 context:
-  version: "0.24.0"
-  build_number: 3
+  version: "0.24.1"
+  build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -79,7 +79,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: f799cdd1d67a3edbcdc6af8fb416fe1b019b512fb426c0314302cd81518a0095
+  sha256: 071da2078600bfec4886efab77358c9329abfedcf1488b05879b556cb9b84ba7
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
@@ -202,6 +202,7 @@ outputs:
             - scipy
             - pytest-mock
             - pytest-socket
+            - pycocotools
         script:
           - if: not aarch64
             then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
