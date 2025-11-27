@@ -126,12 +126,12 @@ outputs:
                 - libnvjpeg-dev
             - python
             - cross-python_${{ target_platform }}
-            # - numpy
+            - numpy
             - pytorch
             - pytorch * [build=${{ torch_proc_type }}*]
       host:
         - python
-        # - numpy
+        - numpy
         - pip
         - setuptools
         - if: cuda_compiler_version != "None"
@@ -162,9 +162,6 @@ outputs:
         - python
         - pytorch * [build=${{ torch_proc_type }}*]
         - pillow >=5.3.0,!=8.3.0,!=8.3.1
-        # They don't really document it, but it seems that they want a minimum version
-        # https://github.com/pytorch/vision/blob/v0.19.0/packaging/torchvision/meta.yaml#L26
-        - numpy >=1.23.5
         - if: unix
           then:
             - torchvision-extra-decoders
