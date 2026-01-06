@@ -163,6 +163,9 @@ outputs:
         - if: unix
           then:
             - torchvision-extra-decoders
+      run_constraints:
+        # TypeError: only 0-dimensional arrays can be converted to Python scalars
+        - numpy <2.4
     tests:
       - python:
           imports:
