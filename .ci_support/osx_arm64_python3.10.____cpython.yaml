@@ -29,11 +29,13 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 libtorch:
-- '2.7'
+- '2.8'
 libwebp:
 - '1'
 macos_machine:
 - arm64-apple-darwin20.0.0
+numpy:
+- '2'
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -41,7 +43,7 @@ pin_run_as_build:
 python:
 - 3.10.* *_cpython
 pytorch:
-- '2.7'
+- '2.8'
 target_platform:
 - osx-arm64
 zip_keys:
