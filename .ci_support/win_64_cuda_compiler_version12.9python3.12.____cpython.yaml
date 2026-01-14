@@ -14,6 +14,8 @@ cxx_compiler:
 - vs2022
 giflib:
 - '5.2'
+libcudnn_dev:
+- '9'
 libjpeg_turbo:
 - '3'
 libpng:

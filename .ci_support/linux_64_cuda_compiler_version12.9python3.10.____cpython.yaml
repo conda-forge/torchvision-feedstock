@@ -22,6 +22,8 @@ docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:alma9
 giflib:
 - '5.2'
+libcudnn_dev:
+- '9'
 libjpeg_turbo:
 - '3'
 libpng:
