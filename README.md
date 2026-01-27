@@ -14,6 +14,11 @@ Development: https://github.com/pytorch/vision
 Current build status
 ====================
 
+> [!IMPORTANT]
+> The package is part of a large eco system relying on PyTorch.
+> Even if the package is ready on [`conda-forge - torchvision`](https://anaconda.org/channels/conda-forge/packages/torchvision) the tail of depenencies may not be ready for distribution.
+> Please look at [PyTorch `2.10` Migration status](https://conda-forge.org/status/migration/?name=pytorch210) (For future version you may need to update URL with the version string version) for the current status.
+> As a guideline, allow few days for the process to finish.
 
 <table>
     
