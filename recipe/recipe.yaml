@@ -159,27 +159,11 @@ outputs:
             - 'tests_to_skip += " or UCF101TestCase"'
             # likewise; seems to be sensitive to fork method (3.14 with different default always fails)
             - 'tests_to_skip += " or TestVideo"'
-            # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
-            - 'tests_to_skip += " or (test_transforms and test_adjust_saturation)"'
             # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
             # It seems to fail around testing of vgg
             # This test seems to just destroy the memory of the system.
             - 'tests_to_skip += " or test_forward_backward"'
             - 'tests_to_skip += " or test_jit_forward_backward"'
-            # 2022/01/21 hmaarrfk (test_frame_reading)
-            # They indicate that there can be a 1% error in their test.
-            # However, this test seems to causing the CIs to fail when this
-            # case is hit. For example the last CI failed with
-            #
-            # >                   assert mean_delta.item() < 2.5
-            # E                   assert 2.502098560333252 < 2.5
-            - 'tests_to_skip += " or test_frame_reading"'
-            # Random perspective tests can fail if the perspective is too sharp
-            # https://github.com/conda-forge/torchvision-feedstock/issues/38
-            - 'tests_to_skip += " or test_randomperspective_fill"'
-            # Tolerance on the test_frozenbatchnorm2d_eps test seems to be too strict
-            - 'tests_to_skip += " or test_frozenbatchnorm2d_eps"'
-            - 'tests_to_skip += " or test_random_apply"'
             # 2022/03/29 hmaarrfk
             # It seems that this test can cause segmentation faults on the CIs.
             - 'tests_to_skip += " or test_write_video_with_audio"'
@@ -201,33 +185,12 @@ outputs:
             - 'tests_to_skip += " or test_segmentation_model"'
             - 'tests_to_skip += " or test_video_model"'
             - 'tests_to_skip += " or test_vitc_models"'
-            # 2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'
-            - 'tests_to_skip += " or test_transformation_discrete"'
-            - 'tests_to_skip += " or test_transformation_range"'
-            # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
-            - 'tests_to_skip += " or test_batched_vs_single"'
-            # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
-            - 'tests_to_skip += " or test_draw_boxes"'
             # UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated
             - 'tests_to_skip += " or TestHandleLegacyInterface"'
-            # 2024/12 These tests use Internet
-            - 'tests_to_skip += " or test_decode_gif"'
-            - 'tests_to_skip += " or test_download_url"'
-            - 'tests_to_skip += " or test_get_model[lraspp"'
-            - if: linux
+            - if: not linux
               then:
-                # needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22
-                - 'tests_to_skip += " or decode_avif"'
-                - 'tests_to_skip += " or decode_heic"'
-              else:
                 # hangs, then fails on both osx and windows
                 - 'tests_to_skip += " or test_transforms_v2_wrapper_spawn"'
-            - if: osx
-              then:
-                # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
-                - 'tests_to_skip += " or test_adjust_sharpness"'
-                # The least squares solution could not be computed because the input matrix does not have full rank
-                - 'tests_to_skip += " or (TestPerspective and test_transform and make_image)"'
             - if: build_platform == host_platform
               then:
                 - 'modules = ["test/"]'
