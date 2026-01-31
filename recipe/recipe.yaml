@@ -45,6 +45,9 @@ outputs:
         - if: cuda_compiler_version != "None"
           then:
             - ${{ compiler('cuda') }}
+            # windows looks in build prefix apparently; c.f.
+            # https://github.com/conda-forge/libnvjpeg-feedstock/issues/27
+            - libnvjpeg-dev
         # avoid nested conditions because of
         # https://github.com/conda-forge/conda-smithy/issues/2165
         - if: build_platform != target_platform
