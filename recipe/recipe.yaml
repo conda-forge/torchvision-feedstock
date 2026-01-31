@@ -216,7 +216,7 @@ outputs:
                 - 'tests_to_skip += " or test_adjust_sharpness"'
                 # The least squares solution could not be computed because the input matrix does not have full rank
                 - 'tests_to_skip += " or (TestPerspective and test_transform and make_image)"'
-            - 'sys.exit(pytest.main(["-v", "test/", "-k", f"not ({tests_to_skip})", "--durations=50", "--disable-socket"]))'
+            - 'sys.exit(pytest.main(["-v", "test/", "-k", f"not ({tests_to_skip})", "--durations=50"]))'
 
 about:
   license: BSD-3-Clause
