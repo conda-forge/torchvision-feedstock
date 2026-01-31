@@ -208,10 +208,8 @@ outputs:
             - 'tests_to_skip += " or test_batched_vs_single"'
             # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
             - 'tests_to_skip += " or test_draw_boxes"'
-            # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
-            # causing them to fail
-            - 'tests_to_skip += " or test_equivalent_behavior_weights"'
-            - 'tests_to_skip += " or test_pretrained_pos"'
+            # UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated
+            - 'tests_to_skip += " or TestHandleLegacyInterface"'
             # 2024/12 These tests use Internet
             - 'tests_to_skip += " or test_decode_gif"'
             - 'tests_to_skip += " or test_download_url"'
