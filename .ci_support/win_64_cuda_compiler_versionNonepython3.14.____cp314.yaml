@@ -1,0 +1,38 @@
+c_compiler:
+- vs2022
+c_stdlib:
+- vs
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cuda_compiler:
+- cuda-nvcc
+cuda_compiler_version:
+- None
+cxx_compiler:
+- vs2022
+giflib:
+- '5.2'
+libcudnn_dev:
+- '9'
+libjpeg_turbo:
+- '3'
+libpng:
+- '1.6'
+libtorch:
+- '2.10'
+libwebp:
+- '1'
+numpy:
+- '2'
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+python:
+- 3.14.* *_cp314
+pytorch:
+- '2.10'
+target_platform:
+- win-64
