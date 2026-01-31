@@ -50,7 +50,7 @@ outputs:
             - libnvjpeg-dev
         # avoid nested conditions because of
         # https://github.com/conda-forge/conda-smithy/issues/2165
-        - if: build_platform != target_platform
+        - if: build_platform != host_platform
           then:
             - if: cuda_compiler_version != "None"
               then:
@@ -60,7 +60,7 @@ outputs:
                 - libcusparse-dev
                 - libnvjpeg-dev
             - python
-            - cross-python_${{ target_platform }}
+            - cross-python_${{ host_platform }}
             - numpy
             - pytorch
             - pytorch * [build=${{ torch_proc_type }}*]
