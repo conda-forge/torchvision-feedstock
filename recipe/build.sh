@@ -1,12 +1,15 @@
+#!/bin/bash
 set -ex
 
 if [[ "$cuda_compiler_version" == "None" ]]; then
   export FORCE_CUDA=0
 else
+  export CUDA_TOOLKIT_ROOT_DIR="${PREFIX}"
   if [[ ${cuda_compiler_version} == 12.9 ]]; then
       export TORCH_CUDA_ARCH_LIST="5.0;6.0;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-      # $CUDA_HOME not set in CUDA 12.0. Using $PREFIX
       export CUDA_TOOLKIT_ROOT_DIR="${PREFIX}"
+  elif [[ ${cuda_compiler_version} == 13.0 ]]; then
+      export TORCH_CUDA_ARCH_LIST="7.5;8.0;8.6;8.9;9.0;10.0;11.0;12.0+PTX"
   else
       echo "unsupported cuda version. edit build.sh"
       exit 1
