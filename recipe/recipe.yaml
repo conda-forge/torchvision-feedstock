@@ -157,6 +157,8 @@ outputs:
             - 'tests_to_skip += " or HMDB51TestCase"'
             - 'tests_to_skip += " or KineticsTestCase"'
             - 'tests_to_skip += " or UCF101TestCase"'
+            # likewise; seems to be sensitive to fork method (3.14 with different default always fails)
+            - 'tests_to_skip += " or TestVideo"'
             # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
             - 'tests_to_skip += " or (test_transforms and test_adjust_saturation)"'
             # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
