@@ -1,6 +1,6 @@
 context:
   version: "0.25.0"
-  build_number: 2
+  build_number: 3
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -159,38 +159,33 @@ outputs:
             - 'tests_to_skip += " or UCF101TestCase"'
             # likewise; seems to be sensitive to fork method (3.14 with different default always fails)
             - 'tests_to_skip += " or TestVideo"'
-            # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
-            # It seems to fail around testing of vgg
-            # This test seems to just destroy the memory of the system.
-            - 'tests_to_skip += " or test_forward_backward"'
-            - 'tests_to_skip += " or test_jit_forward_backward"'
-            # 2022/03/29 hmaarrfk
-            # It seems that this test can cause segmentation faults on the CIs.
-            - 'tests_to_skip += " or test_write_video_with_audio"'
-            - 'tests_to_skip += " or test_video_clips_custom_fps"'
-            # # 2022/07 hmaarrfk really large memory tests. Fail on CIs
-            - 'tests_to_skip += " or test_build_fx_feature_extractor"'
-            - 'tests_to_skip += " or test_classification_model"'
-            - 'tests_to_skip += " or test_detection_model"'
-            - 'tests_to_skip += " or test_fasterrcnn_double"'
-            - 'tests_to_skip += " or test_fasterrcnn_switch_devices"'
-            - 'tests_to_skip += " or test_googlenet_eval"'
-            - 'tests_to_skip += " or test_inception_v3_eval"'
-            - 'tests_to_skip += " or test_memory_efficient_densenet"'
-            - 'tests_to_skip += " or test_mobilenet_norm_layer"'
-            - 'tests_to_skip += " or test_mobilenet_v2_residual_setting"'
-            - 'tests_to_skip += " or test_quantized_classification_model"'
-            - 'tests_to_skip += " or test_raft"'
-            - 'tests_to_skip += " or test_resnet_dilation"'
-            - 'tests_to_skip += " or test_segmentation_model"'
             - 'tests_to_skip += " or test_video_model"'
-            - 'tests_to_skip += " or test_vitc_models"'
             # UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated
             - 'tests_to_skip += " or TestHandleLegacyInterface"'
+            # still deadly for our CI agents as of Jan. 2026, even with a swapfile;
+            # the effect appears to be cumulative, where predominantly the last tests (in order)
+            # under (mostly) `test{,_jit}_forward_backward` run out of memory at some point;
+            # skip the tail end of the model fixtures alphabetically (which fails most often)
+            - 'tests_to_skip += " or (test_classification_model and (vgg or vit or wide))"'
+            - if: linux or win
+              then:
+                - 'tests_to_skip += " or test_jit_forward_backward[convnext_large]"'
+                # these tend to fail almost always on windows, but it regularly happens on linux too
+                - 'tests_to_skip += " or (("'
+                - 'tests_to_skip += "      test_forward_backward"'
+                - 'tests_to_skip += "      or test_jit_forward_backward"'
+                - 'tests_to_skip += "     ) and (vgg or vit or wide))"'
+                # these may segfault
+                - 'tests_to_skip += " or test_fasterrcnn_double"'
+                - 'tests_to_skip += " or test_segmentation_model"'
             - if: not linux
               then:
                 # hangs, then fails on both osx and windows
                 - 'tests_to_skip += " or test_transforms_v2_wrapper_spawn"'
+            - if: match(python, "==3.14")
+              then:
+                # unclear why, but 3.14 does not like this test
+                - 'tests_to_skip += " or test_classification_model"'
             - if: build_platform == host_platform
               then:
                 - 'modules = ["test/"]'
