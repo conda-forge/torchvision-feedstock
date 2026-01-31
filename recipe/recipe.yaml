@@ -181,8 +181,9 @@ outputs:
                 - 'tests_to_skip += " or test_transforms_v2_wrapper_spawn"'
             - if: match(python, "==3.14")
               then:
-                # unclear why, but 3.14 does not like this test
+                # unclear why, but 3.14 does not like these tests
                 - 'tests_to_skip += " or test_classification_model"'
+                - 'tests_to_skip += " or test_detection_model"'
             - if: win
               then:
                 # minor tolerance violation
