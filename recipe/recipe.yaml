@@ -7,72 +7,6 @@ context:
   torch_proc_type: ${{ "cuda" if cuda_compiler_version != "None" else "cpu" }}
   build_string_prefix: ${{ ("cuda" ~ (cuda_compiler_version | replace(".", ""))) if cuda_compiler_version != "None" else "cpu" }}
 
-  tests_to_skip: >
-    ${{ 'skip test_url_is_accessible instead of hitting 20+ servers per run, since' if 0 }}
-    ${{ 'each server might be occasionally unresponsive and end up failing our CI' if 0 }}
-    test_url_is_accessible
-    ${{ 'spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"' if 0 }}
-    or (test_transforms and test_adjust_saturation)
-    ${{ 'osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56' if 0 }}
-    ${{ "or test_adjust_sharpness" if osx }}
-    ${{ '2021/10/28 hmaarrfk: I am able to run it locally on a large machine.' if 0 }}
-    ${{ 'It seems to fail around testing of vgg' if 0 }}
-    ${{ 'This test seems to just destroy the memory of the system.' if 0 }}
-    or test_forward_backward
-    or test_jit_forward_backward
-    ${{ '2022/01/21 hmaarrfk (test_frame_reading)' if 0 }}
-    ${{ 'They indicate that there can be a 1% error in their test.' if 0 }}
-    ${{ 'However, this test seems to causing the CIs to fail when this' if 0 }}
-    ${{ 'case is hit. For example the last CI failed with' if 0 }}
-    ${{ '>                   assert mean_delta.item() < 2.5' if 0 }}
-    ${{ 'E                   assert 2.502098560333252 < 2.5' if 0 }}
-    or test_frame_reading
-    ${{ 'Random perspective tests can fail if the perspective is too sharp' if 0 }}
-    ${{ 'https://github.com/conda-forge/torchvision-feedstock/issues/38' if 0 }}
-    or test_randomperspective_fill
-    ${{ 'Tolerance on the test_frozenbatchnorm2d_eps test seems to be too strict' if 0 }}
-    or test_frozenbatchnorm2d_eps
-    or test_random_apply
-    ${{ '2022/03/29 hmaarrfk' if 0 }}
-    ${{ 'It seems that this test can cause segmentation faults on the CIs.' if 0 }}
-    or test_write_video_with_audio
-    or test_video_clips_custom_fps
-    ${{ '2022/07 hmaarrfk really large memory tests. Fail on CIs' if 0 }}
-    or test_memory_efficient_densenet
-    or test_resnet_dilation
-    or test_mobilenet_v2_residual_setting
-    or test_mobilenet_norm_layer
-    or test_inception_v3_eval
-    or test_fasterrcnn_double
-    or test_googlenet_eval
-    or test_fasterrcnn_switch_devices
-    or test_mobilenet_v2_residual_setting
-    or test_vitc_models
-    or test_classification_model
-    or test_segmentation_model
-    or test_detection_model
-    or test_detection_model_validation
-    or test_video_model
-    or test_quantized_classification_model
-    or test_detection_model_trainable_backbone_layers
-    or test_raft
-    or test_build_fx_feature_extractor
-    ${{ "2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'" if 0 }}
-    or test_transformation_range
-    or test_transformation_discrete
-    ${{ '2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)' if 0 }}
-    or test_batched_vs_single
-    ${{ '2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)' if 0 }}
-    or test_draw_boxes
-    ${{ '2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased' if 0 }}
-    ${{ 'causing them to fail' if 0 }}
-    or test_pretrained_pos or test_equivalent_behavior_weights
-    ${{ '2024/12 These tests use Internet' if 0 }}
-    or test_decode_gif or test_download_url or "test_get_model[lraspp"
-    ${{ " or (TestPerspective and test_transform and make_image)" if osx }}
-    ${{ "needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22" if 0 }}
-    ${{ " or decode_avif or decode_heic" if linux }}
-
 recipe:
   name: torchvision
   version: ${{ version }}
@@ -207,13 +141,82 @@ outputs:
             - pytest-socket
             - pycocotools
         script:
-          - if: not aarch64
-            then: pytest --disable-socket --verbose -k "not (${{ tests_to_skip }})" --durations=50 test/
-          - if: aarch64 and (build_platform == target_platform)
-            then: pytest --disable-socket -k "not (${{ tests_to_skip }})" --durations=50 test/
-          # Needed to avoid "expected field `script` to be a list of commands" on aarch64
-          - if: aarch64 and (build_platform != target_platform)
-            then: true
+          interpreter: python
+          content:
+            - 'import pytest, sys'
+            - 'tests_to_skip = "_not_a_real_test"'
+            # skip test_url_is_accessible instead of hitting 20+ servers per run, since
+            # each server might be occasionally unresponsive and end up failing our CI
+            - 'tests_to_skip += " or test_url_is_accessible"'
+            # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
+            - 'tests_to_skip += " or (test_transforms and test_adjust_saturation)"'
+            # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
+            # It seems to fail around testing of vgg
+            # This test seems to just destroy the memory of the system.
+            - 'tests_to_skip += " or test_forward_backward"'
+            - 'tests_to_skip += " or test_jit_forward_backward"'
+            # 2022/01/21 hmaarrfk (test_frame_reading)
+            # They indicate that there can be a 1% error in their test.
+            # However, this test seems to causing the CIs to fail when this
+            # case is hit. For example the last CI failed with
+            #
+            # >                   assert mean_delta.item() < 2.5
+            # E                   assert 2.502098560333252 < 2.5
+            - 'tests_to_skip += " or test_frame_reading"'
+            # Random perspective tests can fail if the perspective is too sharp
+            # https://github.com/conda-forge/torchvision-feedstock/issues/38
+            - 'tests_to_skip += " or test_randomperspective_fill"'
+            # Tolerance on the test_frozenbatchnorm2d_eps test seems to be too strict
+            - 'tests_to_skip += " or test_frozenbatchnorm2d_eps"'
+            - 'tests_to_skip += " or test_random_apply"'
+            # 2022/03/29 hmaarrfk
+            # It seems that this test can cause segmentation faults on the CIs.
+            - 'tests_to_skip += " or test_write_video_with_audio"'
+            - 'tests_to_skip += " or test_video_clips_custom_fps"'
+            # # 2022/07 hmaarrfk really large memory tests. Fail on CIs
+            - 'tests_to_skip += " or test_build_fx_feature_extractor"'
+            - 'tests_to_skip += " or test_classification_model"'
+            - 'tests_to_skip += " or test_detection_model"'
+            - 'tests_to_skip += " or test_fasterrcnn_double"'
+            - 'tests_to_skip += " or test_fasterrcnn_switch_devices"'
+            - 'tests_to_skip += " or test_googlenet_eval"'
+            - 'tests_to_skip += " or test_inception_v3_eval"'
+            - 'tests_to_skip += " or test_memory_efficient_densenet"'
+            - 'tests_to_skip += " or test_mobilenet_norm_layer"'
+            - 'tests_to_skip += " or test_mobilenet_v2_residual_setting"'
+            - 'tests_to_skip += " or test_quantized_classification_model"'
+            - 'tests_to_skip += " or test_raft"'
+            - 'tests_to_skip += " or test_resnet_dilation"'
+            - 'tests_to_skip += " or test_segmentation_model"'
+            - 'tests_to_skip += " or test_video_model"'
+            - 'tests_to_skip += " or test_vitc_models"'
+            # 2023/01 These tests fail on newer numpy with module 'numpy' has no attribute 'int'
+            - 'tests_to_skip += " or test_transformation_discrete"'
+            - 'tests_to_skip += " or test_transformation_range"'
+            # 2023/05 The gaussian blur tests are known to be flaky due to some non-determinism on CUDA (see pytorch/vision#6755)
+            - 'tests_to_skip += " or test_batched_vs_single"'
+            # 2023/11 Draw boxes test broken by pillow 1.10.0, but is non-critical and the test is patched upstream (pytorch/vision#8051)
+            - 'tests_to_skip += " or test_draw_boxes"'
+            # 2024/02 These tests assert warnings and in PyTorch 2.1.2 the number of warnings increased
+            # causing them to fail
+            - 'tests_to_skip += " or test_equivalent_behavior_weights"'
+            - 'tests_to_skip += " or test_pretrained_pos"'
+            # 2024/12 These tests use Internet
+            - 'tests_to_skip += " or test_decode_gif"'
+            - 'tests_to_skip += " or test_download_url"'
+            - 'tests_to_skip += " or test_get_model[lraspp"'
+            - if: linux
+              then:
+                # needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22
+                - 'tests_to_skip += " or decode_avif"'
+                - 'tests_to_skip += " or decode_heic"'
+            - if: osx
+              then:
+                # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
+                - 'tests_to_skip += " or test_adjust_sharpness"'
+                # The least squares solution could not be computed because the input matrix does not have full rank
+                - 'tests_to_skip += " or (TestPerspective and test_transform and make_image)"'
+            - 'sys.exit(pytest.main(["-v", "test/", "-k", f"not ({tests_to_skip})", "--durations=50", "--disable-socket"]))'
 
 about:
   license: BSD-3-Clause
