@@ -213,6 +213,9 @@ outputs:
                 # needs packaging a plugin, see https://github.com/pytorch-labs/torchvision-extra-decoders/issues/22
                 - 'tests_to_skip += " or decode_avif"'
                 - 'tests_to_skip += " or decode_heic"'
+              else:
+                # hangs, then fails on both osx and windows
+                - 'tests_to_skip += " or test_transforms_v2_wrapper_spawn"'
             - if: osx
               then:
                 # osx warns with nnpack if there is no AVX2, see conda-forge/pytorch-cpu-feedstock#56
