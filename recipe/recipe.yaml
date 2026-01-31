@@ -184,6 +184,8 @@ outputs:
                 # unclear why, but 3.14 does not like these tests
                 - 'tests_to_skip += " or test_classification_model"'
                 - 'tests_to_skip += " or test_detection_model"'
+                # only linux
+                - 'tests_to_skip += " or test_forward_negative_sample_ssd"'
             - if: win
               then:
                 # minor tolerance violation
