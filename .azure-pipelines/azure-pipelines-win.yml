@@ -56,8 +56,9 @@ jobs:
     maxParallel: 14
   timeoutInMinutes: 360
   variables:
-    CONDA_BLD_PATH: C:\bld\
+    CONDA_BLD_PATH: C:\\bld\\
     MINIFORGE_HOME: D:\Miniforge
+    SET_PAGEFILE: 'True'
     UPLOAD_TEMP: D:\\tmp
 
   steps:
