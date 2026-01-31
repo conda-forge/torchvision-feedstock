@@ -151,6 +151,12 @@ outputs:
             # skip test_url_is_accessible instead of hitting 20+ servers per run, since
             # each server might be occasionally unresponsive and end up failing our CI
             - 'tests_to_skip += " or test_url_is_accessible"'
+            # skip classes inheriting from `datasets_utils.VideoDatasetTestCase`, which
+            # are very prone to hanging, especially on osx & windows; see
+            # https://github.com/pytorch/vision/blob/v0.25.0/test/test_datasets.py
+            - 'tests_to_skip += " or HMDB51TestCase"'
+            - 'tests_to_skip += " or KineticsTestCase"'
+            - 'tests_to_skip += " or UCF101TestCase"'
             # spurious failure because upstream skip (Image.__version__ >= "7") does not trigger for Pillow "10"
             - 'tests_to_skip += " or (test_transforms and test_adjust_saturation)"'
             # 2021/10/28 hmaarrfk: I am able to run it locally on a large machine.
