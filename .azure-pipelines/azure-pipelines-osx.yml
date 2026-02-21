@@ -38,7 +38,7 @@ jobs:
       osx_arm64_python3.14.____cp314:
         CONFIG: osx_arm64_python3.14.____cp314
         UPLOAD_PACKAGES: 'True'
-    maxParallel: 9
+    maxParallel: 8
   timeoutInMinutes: 360
   variables: {}
 
