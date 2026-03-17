@@ -68,7 +68,7 @@ outputs:
         - python
         - numpy
         - pip
-        - setuptools
+        - setuptools <82
         - if: cuda_compiler_version != "None"
           then:
             - cuda-version ==${{ cuda_compiler_version }}
