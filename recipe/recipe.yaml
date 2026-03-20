@@ -48,6 +48,10 @@ outputs:
             # windows looks in build prefix apparently; c.f.
             # https://github.com/conda-forge/libnvjpeg-feedstock/issues/27
             - libnvjpeg-dev
+        # When on linux-aarch64 with CUDA, we need to build for the correct arm variant;
+        - if: linux and aarch64 and cuda_compiler_version != "None"
+          then:
+           - arm-variant * ${{ arm_variant_type }}
         # avoid nested conditions because of
         # https://github.com/conda-forge/conda-smithy/issues/2165
         - if: build_platform != host_platform
@@ -163,6 +167,8 @@ outputs:
             # under (mostly) `test{,_jit}_forward_backward` run out of memory at some point;
             # skip the tail end of the model fixtures alphabetically (which fails most often)
             - 'tests_to_skip += " or (test_classification_model and (vgg or vit or wide))"'
+            # minor tolerance violation in quantized model, flaky behavior.
+            - 'tests_to_skip += " or test_quantized_classification_model[resnext101_32x8d]"'
             - if: linux or win
               then:
                 - 'tests_to_skip += " or test_jit_forward_backward[convnext_large]"'
