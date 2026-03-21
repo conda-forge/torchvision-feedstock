@@ -118,6 +118,8 @@ outputs:
       name: torchvision-tests
     build:
       script: ${{ 'true' if unix else 'exit /b 0' }}
+      # Seems like we are running out of space on aarch due to the cross compilation tooling
+      skip: ${{ 'true' if aarch64 else 'false' }}
     requirements:
       run:
         - ${{ pin_subpackage('torchvision', exact=True) }}
