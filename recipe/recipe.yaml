@@ -22,9 +22,6 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
-    # 2025/07/06 shermansiu
-    # Patch out the check for the minor version https://github.com/conda-forge/pytorch-cpu-feedstock/issues/390#issuecomment-3043373403
-    - patches/0004-Allow-different-CUDA-minor-versions.patch
 
 build:
   number: ${{ build_number }}
