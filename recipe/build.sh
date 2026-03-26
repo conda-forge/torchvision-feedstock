@@ -11,7 +11,9 @@ else
     echo "CF_TORCH_CUDA_ARCH_LIST is not set. Ensure the correct pytorch is installed and its activation scripts have run."
     exit 1
   fi
-  export TORCH_CUDA_ARCH_LIST="${CF_TORCH_CUDA_ARCH_LIST}"
+  # Due to a change in the supported CUDA architectures, we need to replace 10.1 with 11.0 in the arch list if it is present.
+  # See: https://github.com/conda-forge/pytorch-cpu-feedstock/issues/494
+  export TORCH_CUDA_ARCH_LIST="${CF_TORCH_CUDA_ARCH_LIST//10.1/11.0}"
   echo "TORCH_CUDA_ARCH_LIST is set to ${TORCH_CUDA_ARCH_LIST}"
   export FORCE_CUDA=1
 fi
