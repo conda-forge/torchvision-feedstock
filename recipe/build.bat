@@ -11,14 +11,13 @@ set "TORCHVISION_USE_HEIC=1"
 set "TORCHVISION_USE_FFMPEG=0"
 
 if not "%cuda_compiler_version%" == "None" (
-    if "%cuda_compiler_version:~0,2%"=="12" (
-        set "TORCH_CUDA_ARCH_LIST=5.0;6.0;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-    ) else if "%cuda_compiler_version%" == "13.0" (
-        set "TORCH_CUDA_ARCH_LIST=7.5;8.0;8.6;8.9;9.0;10.0;11.0;12.0+PTX"
-    ) else (
-        echo "unsupported cuda version. edit build.bat"
+    REM CF_TORCH_CUDA_ARCH_LIST is set by pytorch's activation scripts to match the arch list pytorch was built with.
+    REM See https://github.com/conda-forge/pytorch-cpu-feedstock/blob/main/recipe/activate.sh
+    if "%CF_TORCH_CUDA_ARCH_LIST%" == "" (
+        echo CF_TORCH_CUDA_ARCH_LIST is not set. Ensure the correct pytorch is installed and its activation scripts have run.
         exit /b 1
     )
+    set "TORCH_CUDA_ARCH_LIST=%CF_TORCH_CUDA_ARCH_LIST%"
 
     set FORCE_CUDA=1
     set TORCHVISION_USE_NVJPEG=1
