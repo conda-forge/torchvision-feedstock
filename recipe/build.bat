@@ -18,6 +18,7 @@ if not "%cuda_compiler_version%" == "None" (
         exit /b 1
     )
     set "TORCH_CUDA_ARCH_LIST=%CF_TORCH_CUDA_ARCH_LIST%"
+    echo TORCH_CUDA_ARCH_LIST is set to %TORCH_CUDA_ARCH_LIST%
 
     set FORCE_CUDA=1
     set TORCHVISION_USE_NVJPEG=1

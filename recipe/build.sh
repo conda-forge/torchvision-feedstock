@@ -12,6 +12,7 @@ else
     exit 1
   fi
   export TORCH_CUDA_ARCH_LIST="${CF_TORCH_CUDA_ARCH_LIST}"
+  echo "TORCH_CUDA_ARCH_LIST is set to ${TORCH_CUDA_ARCH_LIST}"
   export FORCE_CUDA=1
 fi
 
