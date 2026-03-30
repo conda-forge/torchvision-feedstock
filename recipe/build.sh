@@ -17,7 +17,7 @@ else
     fi
     # Due to a change in the supported CUDA architectures, we need to replace 10.1 with 11.0 in the arch list if it is present.
     # See: https://github.com/conda-forge/pytorch-cpu-feedstock/issues/494
-    export TORCH_CUDA_ARCH_LIST="${CF_TORCH_CUDA_ARCH_LIST//10.1/11.0}"
+    export TORCH_CUDA_ARCH_LIST="${CF_TORCH_CUDA_ARCH_LIST}"
   fi
   echo "TORCH_CUDA_ARCH_LIST is set to ${TORCH_CUDA_ARCH_LIST}"
   export FORCE_CUDA=1
