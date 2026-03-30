@@ -15,7 +15,7 @@ if not "%cuda_compiler_version%" == "None" (
     REM See https://github.com/conda-forge/pytorch-cpu-feedstock/blob/main/recipe/activate.sh
     if "%CF_TORCH_CUDA_ARCH_LIST%" == "" (
         echo CF_TORCH_CUDA_ARCH_LIST is not set. Ensure the correct pytorch is installed and its activation scripts have run.
-        exit /b 1
+        exit 1
     )
     set "TORCH_CUDA_ARCH_LIST=%CF_TORCH_CUDA_ARCH_LIST%"
     echo TORCH_CUDA_ARCH_LIST is set to %TORCH_CUDA_ARCH_LIST%
