@@ -218,4 +218,5 @@ extra:
     - nehaljwani
     - hmaarrfk
     - h-vetinari
+    - ruben-arts # special interest in Jetson/Tegra builds
   feedstock-name: torchvision
