@@ -19,7 +19,6 @@ if not "%cuda_compiler_version%" == "None" (
         echo "unsupported cuda version. edit build.bat"
         exit /b 1
     )
-    
     set FORCE_CUDA=1
     set TORCHVISION_USE_NVJPEG=1
 ) else (
