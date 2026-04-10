@@ -1,6 +1,6 @@
 context:
-  version: "0.25.0"
-  build_number: 5
+  version: "0.26.0"
+  build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -13,7 +13,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: a7ac1b3ab489d71f6e27edfad1e27616e4b8a9b1517e60fce4a950600d3510e8
+  sha256: fb95b6b78b3801c4d4d6332f7a5a0b6c624588e1b39e0d6fa145227b0c749403
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
@@ -22,9 +22,6 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
-    # 2025/07/06 shermansiu
-    # Patch out the check for the minor version https://github.com/conda-forge/pytorch-cpu-feedstock/issues/390#issuecomment-3043373403
-    - patches/0004-Allow-different-CUDA-minor-versions.patch
 
 build:
   number: ${{ build_number }}
@@ -49,9 +46,9 @@ outputs:
             # https://github.com/conda-forge/libnvjpeg-feedstock/issues/27
             - libnvjpeg-dev
         # When on linux-aarch64 with CUDA, we need to build for the correct arm variant;
-        - if: linux and aarch64 and cuda_compiler_version != "None"
-          then:
-           - arm-variant * ${{ arm_variant_type }}
+            - if: linux and aarch64
+              then:
+                - arm-variant * ${{ arm_variant_type }}
         # avoid nested conditions because of
         # https://github.com/conda-forge/conda-smithy/issues/2165
         - if: build_platform != host_platform
