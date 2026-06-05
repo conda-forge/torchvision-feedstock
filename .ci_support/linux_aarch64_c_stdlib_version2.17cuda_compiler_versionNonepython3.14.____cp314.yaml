@@ -31,7 +31,7 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 libtorch:
-- '2.10'
+- '2.11'
 libwebp:
 - '1'
 numpy:
@@ -43,7 +43,7 @@ pin_run_as_build:
 python:
 - 3.14.* *_cp314
 pytorch:
-- '2.10'
+- '2.11'
 target_platform:
 - linux-aarch64
 zip_keys:
