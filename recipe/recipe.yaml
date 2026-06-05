@@ -32,6 +32,10 @@ outputs:
       name: torchvision
     build:
       script:
+        # `file` is required: with only `env` set, rattler-build (>=0.65) no
+        # longer falls back to running build.sh/build.bat, producing an empty
+        # package. `file: build` resolves to build.sh on unix / build.bat on win.
+        file: build
         env:
           BUILD_VERSION: ${{ version }}
     requirements:
