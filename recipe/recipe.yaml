@@ -152,6 +152,13 @@ outputs:
             # skip test_url_is_accessible instead of hitting 20+ servers per run, since
             # each server might be occasionally unresponsive and end up failing our CI
             - 'tests_to_skip += " or test_url_is_accessible"'
+            # test_decode_gif[*-earth] downloads earth.gif from wikipedia at test
+            # time; wikimedia blocks the default requests User-Agent and returns a
+            # non-gif body, so the decoder raises "DGifOpenFileName() failed - 103".
+            # Upstream skips this under IN_OSS_CI, but rattler-build's sanitized test
+            # env doesn't carry the CI var that patch 0003 keys on, so skip it here.
+            # (The other test_decode_gif assets come from giflib and pass.)
+            - 'tests_to_skip += " or (test_decode_gif and earth)"'
             # skip classes inheriting from `datasets_utils.VideoDatasetTestCase`, which
             # are very prone to hanging, especially on osx & windows; see
             # https://github.com/pytorch/vision/blob/v0.25.0/test/test_datasets.py
