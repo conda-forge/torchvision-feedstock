@@ -1,6 +1,6 @@
 context:
   version: "0.26.0"
-  build_number: 0
+  build_number: 1
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -32,6 +32,10 @@ outputs:
       name: torchvision
     build:
       script:
+        # `file` is required: with only `env` set, rattler-build (>=0.65) no
+        # longer falls back to running build.sh/build.bat, producing an empty
+        # package. `file: build` resolves to build.sh on unix / build.bat on win.
+        file: build
         env:
           BUILD_VERSION: ${{ version }}
     requirements:
@@ -148,6 +152,13 @@ outputs:
             # skip test_url_is_accessible instead of hitting 20+ servers per run, since
             # each server might be occasionally unresponsive and end up failing our CI
             - 'tests_to_skip += " or test_url_is_accessible"'
+            # test_decode_gif[*-earth] downloads earth.gif from wikipedia at test
+            # time; wikimedia blocks the default requests User-Agent and returns a
+            # non-gif body, so the decoder raises "DGifOpenFileName() failed - 103".
+            # Upstream skips this under IN_OSS_CI, but rattler-build's sanitized test
+            # env doesn't carry the CI var that patch 0003 keys on, so skip it here.
+            # (The other test_decode_gif assets come from giflib and pass.)
+            - 'tests_to_skip += " or (test_decode_gif and earth)"'
             # skip classes inheriting from `datasets_utils.VideoDatasetTestCase`, which
             # are very prone to hanging, especially on osx & windows; see
             # https://github.com/pytorch/vision/blob/v0.25.0/test/test_datasets.py
@@ -190,6 +201,12 @@ outputs:
                 - 'tests_to_skip += " or test_build_fx_feature_extractor"'
                 # only linux
                 - 'tests_to_skip += " or test_forward_negative_sample_ssd"'
+                # TestFxFeatureExtraction builds+JITs an FX feature extractor for
+                # every model within a single process; on 3.14 (less headroom) the
+                # memory accumulates and OOM-kills the runner early in
+                # test_backbone_utils (status 137). Reproduced locally under a 16 GB
+                # cap (== a CI agent); skipping the class lets the suite finish.
+                - 'tests_to_skip += " or TestFxFeatureExtraction"'
             - if: win
               then:
                 # minor tolerance violation

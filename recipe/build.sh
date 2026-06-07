@@ -21,6 +21,11 @@ else
   fi
   echo "TORCH_CUDA_ARCH_LIST is set to ${TORCH_CUDA_ARCH_LIST}"
   export FORCE_CUDA=1
+  # pytorch's torch.utils.cpp_extension._check_cuda_version still caps CUDA 12.9
+  # at gcc <14 (an outdated bound), but conda-forge pins gcc 14 for CUDA 12.9 and
+  # pytorch itself builds its cuda129 packages with gcc 14, so the toolchain is
+  # ABI-consistent. Skip the stale false-positive check; nvcc 12.9 supports gcc 14.
+  export TORCH_DONT_CHECK_COMPILER_ABI=1
 fi
 
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
