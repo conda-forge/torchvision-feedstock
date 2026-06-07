@@ -201,6 +201,12 @@ outputs:
                 - 'tests_to_skip += " or test_build_fx_feature_extractor"'
                 # only linux
                 - 'tests_to_skip += " or test_forward_negative_sample_ssd"'
+                # TestFxFeatureExtraction builds+JITs an FX feature extractor for
+                # every model within a single process; on 3.14 (less headroom) the
+                # memory accumulates and OOM-kills the runner early in
+                # test_backbone_utils (status 137). Reproduced locally under a 16 GB
+                # cap (== a CI agent); skipping the class lets the suite finish.
+                - 'tests_to_skip += " or TestFxFeatureExtraction"'
             - if: win
               then:
                 # minor tolerance violation
