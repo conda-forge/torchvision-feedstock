@@ -145,7 +145,6 @@ jobs:
         tools_install_dir: D:\Miniforge
   timeoutInMinutes: 360
   variables:
-    SET_PAGEFILE: 'True'
     UPLOAD_TEMP: D:\\tmp
 
   steps:

@@ -1,5 +1,5 @@
 context:
-  version: "0.27.1"
+  version: "0.28.0"
   build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
@@ -13,7 +13,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 705d5ab7d01af9ece3bfbb1486eed3c23a2f68414fcc9c9a88910fb3c018c3db
+  sha256: ecc4451241c8eeadc0c88213bd65c7932c9622d1d0034254b938f25362283ee9
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
@@ -22,6 +22,11 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
+    # scipy 1.18 shortcuts the "norm" cdf in kstest to scipy.special.ndtr, which
+    # does not accept loc/scale, so the documented `args=` tuple now raises
+    # TypeError. The args torchvision passes, (0, 1), are just the standard
+    # normal defaults, so drop them.
+    - patches/0004-Fix-kstest-call-for-scipy-1.18.patch
 
 build:
   number: ${{ build_number }}
