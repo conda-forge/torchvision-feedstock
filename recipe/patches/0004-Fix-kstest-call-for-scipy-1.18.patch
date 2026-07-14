@@ -1,0 +1,29 @@
+From 2ed0d3185c7026ede9b45e7a97cac21e33a410b3 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Mon, 13 Jul 2026 21:54:59 -0400
+Subject: [PATCH] Do not pass redundant args to kstest (scipy 1.18 compat)
+
+---
+ test/test_transforms.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/test/test_transforms.py b/test/test_transforms.py
+index d93800d..6a1425b 100644
+--- a/test/test_transforms.py
++++ b/test/test_transforms.py
+@@ -1932,7 +1932,11 @@ def test_randomperspective_fill(mode, seed):
+ @pytest.mark.skipif(stats is None, reason="scipy.stats not available")
+ def test_normalize():
+     def samples_from_standard_normal(tensor):
+-        p_value = stats.kstest(list(tensor.view(-1)), "norm", args=(0, 1)).pvalue
++        # args=(0, 1) is the default (standard normal) for "norm", but passing it
++        # explicitly breaks on scipy 1.18, which shortcuts the "norm" cdf to
++        # scipy.special.ndtr -- that does not accept loc/scale:
++        #   TypeError: ndtr() takes from 1 to 2 positional arguments but 3 were given
++        p_value = stats.kstest(list(tensor.view(-1)), "norm").pvalue
+         return p_value > 0.0001
+ 
+     random_state = random.getstate()
+-- 
+2.53.0
+

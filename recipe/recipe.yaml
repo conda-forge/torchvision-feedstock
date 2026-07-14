@@ -22,6 +22,11 @@ source:
     # 2024/08 hmaarrfk
     # known flaky test https://github.com/pytorch/vision/blob/9e78fe29e0851b10eb8fba0b88cc521ad67cf322/test/test_image.py#L840
     - patches/0003-Skip-OSS-CI-in-conda-forge-as-well.patch
+    # scipy 1.18 shortcuts the "norm" cdf in kstest to scipy.special.ndtr, which
+    # does not accept loc/scale, so the documented `args=` tuple now raises
+    # TypeError. The args torchvision passes, (0, 1), are just the standard
+    # normal defaults, so drop them.
+    - patches/0004-Fix-kstest-call-for-scipy-1.18.patch
 
 build:
   number: ${{ build_number }}
