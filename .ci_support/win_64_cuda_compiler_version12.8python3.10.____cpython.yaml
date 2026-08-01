@@ -9,7 +9,7 @@ channel_targets:
 cuda_compiler:
 - cuda-nvcc
 cuda_compiler_version:
-- '12.9'
+- '12.8'
 cxx_compiler:
 - vs2022
 giflib:
@@ -21,7 +21,7 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 libtorch:
-- '2.12'
+- '2.13'
 libwebp:
 - '1'
 numpy:
@@ -31,8 +31,8 @@ pin_run_as_build:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.13.* *_cp313
+- 3.10.* *_cpython
 pytorch:
-- '2.12'
+- '2.13'
 target_platform:
 - win-64
