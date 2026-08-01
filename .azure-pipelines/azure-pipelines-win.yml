@@ -8,8 +8,8 @@ jobs:
     vmImage: windows-2022
   strategy:
     matrix:
-      win_64_cuda_compiler_version12.9python3.10.____cpython:
-        CONFIG: win_64_cuda_compiler_version12.9python3.10.____cpython
+      win_64_cuda_compiler_version12.8python3.10.____cpython:
+        CONFIG: win_64_cuda_compiler_version12.8python3.10.____cpython
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: C:\\bld\\
         free_disk_space: quick
@@ -17,8 +17,8 @@ jobs:
         resize_partitions: false
         store_build_artifacts: false
         tools_install_dir: D:\Miniforge
-      win_64_cuda_compiler_version12.9python3.11.____cpython:
-        CONFIG: win_64_cuda_compiler_version12.9python3.11.____cpython
+      win_64_cuda_compiler_version12.8python3.11.____cpython:
+        CONFIG: win_64_cuda_compiler_version12.8python3.11.____cpython
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: C:\\bld\\
         free_disk_space: quick
@@ -26,8 +26,8 @@ jobs:
         resize_partitions: false
         store_build_artifacts: false
         tools_install_dir: D:\Miniforge
-      win_64_cuda_compiler_version12.9python3.12.____cpython:
-        CONFIG: win_64_cuda_compiler_version12.9python3.12.____cpython
+      win_64_cuda_compiler_version12.8python3.12.____cpython:
+        CONFIG: win_64_cuda_compiler_version12.8python3.12.____cpython
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: C:\\bld\\
         free_disk_space: quick
@@ -35,8 +35,8 @@ jobs:
         resize_partitions: false
         store_build_artifacts: false
         tools_install_dir: D:\Miniforge
-      win_64_cuda_compiler_version12.9python3.13.____cp313:
-        CONFIG: win_64_cuda_compiler_version12.9python3.13.____cp313
+      win_64_cuda_compiler_version12.8python3.13.____cp313:
+        CONFIG: win_64_cuda_compiler_version12.8python3.13.____cp313
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: C:\\bld\\
         free_disk_space: quick
@@ -44,8 +44,8 @@ jobs:
         resize_partitions: false
         store_build_artifacts: false
         tools_install_dir: D:\Miniforge
-      win_64_cuda_compiler_version12.9python3.14.____cp314:
-        CONFIG: win_64_cuda_compiler_version12.9python3.14.____cp314
+      win_64_cuda_compiler_version12.8python3.14.____cp314:
+        CONFIG: win_64_cuda_compiler_version12.8python3.14.____cp314
         UPLOAD_PACKAGES: 'True'
         build_workspace_dir: C:\\bld\\
         free_disk_space: quick
