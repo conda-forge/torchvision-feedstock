@@ -1,5 +1,5 @@
 arm_variant_type:
-- tegra
+- sbsa
 c_compiler:
 - gcc
 c_compiler_version:
@@ -7,7 +7,7 @@ c_compiler_version:
 c_stdlib:
 - sysroot
 c_stdlib_version:
-- '2.34'
+- '2.17'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -23,7 +23,7 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:alma10
 giflib:
-- '5.2'
+- '6'
 libcudnn_dev:
 - '9'
 libjpeg_turbo:
@@ -41,7 +41,7 @@ pin_run_as_build:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.11.* *_cpython
+- 3.12.* *_cpython
 pytorch:
 - '2.13'
 target_platform:

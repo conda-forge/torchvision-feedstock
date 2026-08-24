@@ -13,7 +13,7 @@ cuda_compiler_version:
 cxx_compiler:
 - vs2022
 giflib:
-- '5.2'
+- '6'
 libcudnn_dev:
 - '9'
 libjpeg_turbo:
