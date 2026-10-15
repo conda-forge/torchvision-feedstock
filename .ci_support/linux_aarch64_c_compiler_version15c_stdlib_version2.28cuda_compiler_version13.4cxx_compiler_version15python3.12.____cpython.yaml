@@ -1,3 +1,5 @@
+arm_variant_type:
+- sbsa
 c_compiler:
 - gcc
 c_compiler_version:
@@ -13,7 +15,7 @@ channel_targets:
 cuda_compiler:
 - cuda-nvcc
 cuda_compiler_version:
-- '13.0'
+- '13.4'
 cxx_compiler:
 - gxx
 cxx_compiler_version:
@@ -29,7 +31,7 @@ libjpeg_turbo:
 libpng:
 - '1.6'
 libtorch:
-- '2.13'
+- '2.14'
 libwebp:
 - '1'
 numpy:
@@ -39,13 +41,14 @@ pin_run_as_build:
     min_pin: x.x
     max_pin: x.x
 python:
-- 3.14.* *_cp314
+- 3.12.* *_cpython
 pytorch:
-- '2.13'
+- '2.14'
 target_platform:
-- linux-64
+- linux-aarch64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
   - c_stdlib_version
   - cuda_compiler_version
+  - arm_variant_type
