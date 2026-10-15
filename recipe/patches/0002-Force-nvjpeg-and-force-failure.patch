@@ -8,31 +8,27 @@ Subject: [PATCH 2/3] Force nvjpeg and force failure
  1 file changed, 7 insertions(+), 10 deletions(-)
 
 diff --git a/setup.py b/setup.py
-index 3b4e17a..e993e0c 100644
+index a93ef1d..04173ee 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -335,17 +335,14 @@ def make_image_extension():
+@@ -374,12 +374,14 @@ def make_image_stable_extension():
              warnings.warn("Building torchvision without WEBP support")
  
      if USE_NVJPEG and (torch.cuda.is_available() or FORCE_CUDA):
 -        nvjpeg_found = CUDA_HOME is not None and (Path(CUDA_HOME) / "include/nvjpeg.h").exists()
--
 -        if nvjpeg_found:
 -            print("Building torchvision with NVJPEG image support")
 -            libraries.append("nvjpeg")
 -            define_macros += [("NVJPEG_FOUND", 1)]
 -            Extension = CUDAExtension
--        else:
--            warnings.warn("Building torchvision without NVJPEG support")
 +        # conda-forge supports cross compilation of nvjpeg whic isn't
 +        # Really supported upstream
 +        print("Building torchvision with NVJPEG image support")
 +        libraries.append("nvjpeg")
 +        define_macros += [("NVJPEG_FOUND", 1)]
 +        Extension = CUDAExtension
-     elif USE_NVJPEG:
--        warnings.warn("Building torchvision without NVJPEG support")
++    elif USE_NVJPEG:
 +        raise RuntimeError("NVJPEG Requested but building without it")
  
      return Extension(
-         name="torchvision.image",
+         name="torchvision.image_stable",
