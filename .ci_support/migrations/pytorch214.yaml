@@ -1,0 +1,11 @@
+migrator_ts: 1792036280.0
+__migrator:
+  commit_message: Rebuild for pytorch 2.14
+  kind: version
+  migration_number: 1
+  bump_number: 1
+  use_local: true
+libtorch:
+- '2.14'
+pytorch:
+- '2.14'
