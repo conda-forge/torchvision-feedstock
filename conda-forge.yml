@@ -1,3 +1,5 @@
+build_platform:
+  osx_arm64: osx_64
 conda_build:
   pkg_format: '2'
 conda_build_tool: rattler-build
@@ -14,6 +16,9 @@ workflow_settings:
   free_disk_space:
     - provider: azure
       value: quick
+    - os: osx
+      provider: github_actions
+      value: quick
   pagefile_size:
     - os: linux
       provider: azure
@@ -23,4 +28,5 @@ workflow_settings:
       value: 16
 provider:
   linux_aarch64: default
-  osx_arm64: default
+  osx_64: github_actions
+  osx_arm64: github_actions
