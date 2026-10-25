@@ -1,5 +1,4 @@
 build_platform:
-  linux_aarch64: linux_64
   osx_arm64: osx_64
 conda_build:
   pkg_format: '2'
@@ -11,16 +10,23 @@ github:
 test: native_and_emulated
 workflow_settings:
   build_workspace_dir:
-  - os: win
-    provider: azure
-    value: C:\\bld\\
+    - os: win
+      provider: azure
+      value: C:\\bld\\
   free_disk_space:
-  - provider: azure
-    value: quick
+    - provider: azure
+      value: quick
+    - os: osx
+      provider: github_actions
+      value: quick
   pagefile_size:
-  - os: linux
-    provider: azure
-    value: 10
-  - os: win
-    provider: azure
-    value: 16
+    - os: linux
+      provider: azure
+      value: 10
+    - os: win
+      provider: azure
+      value: 16
+provider:
+  linux_aarch64: default
+  osx_64: github_actions
+  osx_arm64: github_actions

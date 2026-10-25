@@ -1,3 +1,5 @@
+DOCKER_PLATFORM:
+- linux/aarch64
 arm_variant_type:
 - sbsa
 c_compiler:
@@ -21,7 +23,7 @@ cxx_compiler:
 cxx_compiler_version:
 - '15'
 docker_image:
-- quay.io/condaforge/linux-anvil-x86_64:alma10
+- quay.io/condaforge/linux-anvil-aarch64:alma10
 giflib:
 - '6'
 libcudnn_dev:

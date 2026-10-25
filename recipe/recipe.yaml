@@ -1,6 +1,6 @@
 context:
   version: "0.29.1"
-  build_number: 0
+  build_number: 1
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -186,6 +186,11 @@ outputs:
             - 'tests_to_skip += " or (test_classification_model and (vgg or vit or wide))"'
             # minor tolerance violation in quantized model, flaky behavior.
             - 'tests_to_skip += " or test_quantized_classification_model[resnext101_32x8d]"'
+            # Pillow 13 compat of the PIL reference, not of torchvision itself:
+            # ImageOps.posterize now rejects bits=0, and its bicubic/lanczos resampling
+            # changed enough to exceed the atol=1 comparison against the tensor kernel
+            - 'tests_to_skip += " or (test_posterize and config0)"'
+            - 'tests_to_skip += " or (TestResize and test_image_correctness and False and (bicubic or lanczos))"'
             - if: linux or win
               then:
                 - 'tests_to_skip += " or test_jit_forward_backward[convnext_large]"'
