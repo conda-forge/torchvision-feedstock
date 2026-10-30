@@ -191,6 +191,9 @@ outputs:
             # changed enough to exceed the atol=1 comparison against the tensor kernel
             - 'tests_to_skip += " or (test_posterize and config0)"'
             - 'tests_to_skip += " or (TestResize and test_image_correctness and False and (bicubic or lanczos))"'
+            # expects the C++ warning as a Python UserWarning, which needs pytorch#193451;
+            # that landed after torch 2.14 branched, so drop this skip with torch 2.15
+            - 'tests_to_skip += " or test_decode_webp_grayscale"'
             - if: linux or win
               then:
                 - 'tests_to_skip += " or test_jit_forward_backward[convnext_large]"'
