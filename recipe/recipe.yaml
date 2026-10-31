@@ -1,6 +1,6 @@
 context:
-  version: "0.29.1"
-  build_number: 1
+  version: "0.29.2"
+  build_number: 0
   # see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
   # torchvision requires that CUDA major and minor versions match with pytorch
   # https://github.com/pytorch/vision/blob/fa99a5360fbcd1683311d57a76fcc0e7323a4c1e/torchvision/extension.py#L79C1-L85C1
@@ -13,7 +13,7 @@ recipe:
 
 source:
   url: https://github.com/pytorch/vision/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 0a14655bd32095148d93fa595f93aba45dda0d13b25cc7fe86a041340e4a4862
+  sha256: 6239575329eb0149ff7a7f5cabfab254129f758961afdba650aab37276d8196d
   patches:
     # Our newer conda-forge clang compilers complain about this for OSX
     # https://github.com/pytorch/vision/pull/8406/files#r1730151047
@@ -191,6 +191,9 @@ outputs:
             # changed enough to exceed the atol=1 comparison against the tensor kernel
             - 'tests_to_skip += " or (test_posterize and config0)"'
             - 'tests_to_skip += " or (TestResize and test_image_correctness and False and (bicubic or lanczos))"'
+            # expects the C++ warning as a Python UserWarning, which needs pytorch#193451;
+            # that landed after torch 2.14 branched, so drop this skip with torch 2.15
+            - 'tests_to_skip += " or test_decode_webp_grayscale"'
             - if: linux or win
               then:
                 - 'tests_to_skip += " or test_jit_forward_backward[convnext_large]"'
